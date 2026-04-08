@@ -48,7 +48,7 @@ Plans:
 Plans:
 - [x] `02-01-PLAN.md` — Create the shared typed demo-data layer for the seeded account, quick actions, rates rows, and formatting helpers.
 - [x] `02-02-PLAN.md` — Replace the dashboard placeholder with the seeded account card, quick-actions grid, and dashboard route tests.
-- [ ] `02-03-PLAN.md` — Replace the rates placeholder with the three-row rates board, corridor framing, and rates route tests.
+- [x] `02-03-PLAN.md` — Replace the rates placeholder with the three-row rates board, corridor framing, and rates route tests.
 **UI hint**: yes
 
 ### Phase 3: Transfer Draft & Quote Transparency
@@ -93,7 +93,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Demo Shell & Boundaries | 4/4 | Complete   | 2026-04-08 |
-| 2. Dashboard & Rates Context | 2/3 | In Progress | - |
+| 2. Dashboard & Rates Context | 3/3 | In Progress | - |
 | 3. Transfer Draft & Quote Transparency | 0/TBD | Not started | - |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
 | 5. Demo Reset & Settings | 0/TBD | Not started | - |
