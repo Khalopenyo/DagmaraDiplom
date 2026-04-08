@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@fontsource-variable/manrope/wght.css";
 
 :root {
   --color-bg: #f5f1e8;
@@ -12,17 +13,141 @@
   --radius-control: 16px;
   --radius-card: 24px;
   --shadow-card: 0 16px 40px rgba(24, 38, 58, 0.08);
-  color: var(--color-text-strong);
-  background: var(--color-bg);
   font-family: "Manrope Variable", sans-serif;
+  color: var(--color-text-strong);
+  background:
+    radial-gradient(circle at top left, rgba(15, 108, 189, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(24, 38, 58, 0.08), transparent 22%),
+    var(--color-bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  color: var(--color-text-strong);
   background: var(--color-bg);
 }
 
 #root {
   min-height: 100vh;
+}
+
+button,
+input,
+a {
+  font: inherit;
+}
+
+.intro-stage {
+  position: relative;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 32px;
+}
+
+.intro-card {
+  position: relative;
+  width: min(100%, 760px);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  box-shadow: var(--shadow-card);
+  padding: 32px;
+  backdrop-filter: blur(12px);
+}
+
+.intro-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 108, 189, 0.08);
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.intro-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: currentColor;
+}
+
+.intro-title {
+  margin: 20px 0 0;
+  max-width: 12ch;
+  font-size: clamp(2rem, 3vw, 3.5rem);
+  line-height: 1.08;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+.intro-copy {
+  margin: 20px 0 0;
+  max-width: 56ch;
+  color: var(--color-text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.intro-note {
+  margin: 28px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border-soft);
+  color: var(--color-text-strong);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.intro-orbit {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(15, 108, 189, 0.12), rgba(15, 108, 189, 0.02));
+  filter: blur(8px);
+}
+
+.intro-orbit-left {
+  top: -120px;
+  left: -120px;
+}
+
+.intro-orbit-right {
+  right: -140px;
+  bottom: -150px;
+}
+
+@media (max-width: 640px) {
+  .intro-stage {
+    padding: 20px;
+  }
+
+  .intro-card {
+    padding: 24px;
+  }
+
+  .intro-title {
+    max-width: none;
+  }
+
+  .intro-orbit {
+    width: 280px;
+    height: 280px;
+  }
 }

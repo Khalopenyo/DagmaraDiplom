@@ -1,15 +1,28 @@
 export default function App() {
   return (
-    <main className="flex min-h-screen items-center justify-center p-8">
-      <section className="w-full max-w-xl rounded-[24px] border border-[var(--color-border-soft)] bg-white p-8 shadow-sm">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
+    <main className="intro-stage">
+      <div className="intro-orbit intro-orbit-left" aria-hidden="true" />
+      <div className="intro-orbit intro-orbit-right" aria-hidden="true" />
+
+      <section className="intro-card">
+        <div className="intro-eyebrow">
+          <span className="intro-dot" aria-hidden="true" />
           Dagmara
-        </p>
-        <h1 className="mt-4 text-3xl font-semibold text-[var(--color-text-strong)]">
-          Phase 1 bootstrap surface
+        </div>
+
+        <h1 className="intro-title">
+          Платформа демонстрации трансграничных переводов в цифровых валютах ЦБ
         </h1>
-        <p className="mt-4 text-base text-[var(--color-text-muted)]">
-          Temporary frontend-only demo shell bootstrap.
+
+        <p className="intro-copy">
+          This is a frontend-only demo shell for the diploma MVP. Реального
+          движения денег, live-курсов и официальных интеграций с центральными
+          банками здесь нет.
+        </p>
+
+        <p className="intro-note">
+          Навигация, routed-экраны и сценарий перевода подключаются в следующем
+          плане.
         </p>
       </section>
     </main>
