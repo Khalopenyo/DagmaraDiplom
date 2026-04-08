@@ -12,7 +12,7 @@ This roadmap delivers a frontend-only desktop SPA for one diploma-ready transfer
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Demo Shell & Boundaries** - Establish the desktop SPA shell, navigation, and visible simulation framing.
+- [x] **Phase 1: Demo Shell & Boundaries** - Establish the desktop SPA shell, navigation, and visible simulation framing. (completed 2026-04-08)
 - [ ] **Phase 2: Dashboard & Rates Context** - Show the seeded account context and simulated corridor rates before editing a transfer.
 - [ ] **Phase 3: Transfer Draft & Quote Transparency** - Let the user compose a transfer and inspect the conversion before submission.
 - [ ] **Phase 4: Transaction Simulation & Receipt** - Submit the transfer, simulate deterministic processing, and present the final cheque.
@@ -33,7 +33,7 @@ Plans:
 - [x] `01-01-PLAN.md` — Safely bootstrap the Vite/Tailwind/Vitest workspace and replace the starter app with a demo-safe branded entry screen.
 - [x] `01-02-PLAN.md` — Lock the Phase 1 router tree, route metadata, and canonical demo-copy constants.
 - [x] `01-03-PLAN.md` — Build the persistent shell, shared header/sidebar primitives, and SPA navigation behavior.
-- [ ] `01-04-PLAN.md` — Replace route stubs with demo-safe placeholder screens and phase-level content tests.
+- [x] `01-04-PLAN.md` — Replace route stubs with demo-safe placeholder screens and phase-level content tests.
 **UI hint**: yes
 
 ### Phase 2: Dashboard & Rates Context
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Demo Shell & Boundaries | 3/4 | In Progress|  |
+| 1. Demo Shell & Boundaries | 4/4 | Complete   | 2026-04-08 |
 | 2. Dashboard & Rates Context | 0/TBD | Not started | - |
 | 3. Transfer Draft & Quote Transparency | 0/TBD | Not started | - |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
