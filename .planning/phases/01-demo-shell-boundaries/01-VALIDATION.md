@@ -17,7 +17,7 @@ created: 2026-04-08
 
 | Property | Value |
 |----------|-------|
-| **Framework** | `Vitest 4.1.3 + React Testing Library 16.3.2 + jsdom 29.0.2` |
+| **Framework** | `Vitest 4.1.3 + React Testing Library 16.3.2 + @testing-library/jest-dom + jsdom 29.0.2` |
 | **Config file** | `vite.config.ts` with `test.environment = "jsdom"` and `test.setupFiles = ["./src/test/setup.ts"]` |
 | **Quick run command** | `npm exec tsc --noEmit` |
 | **Full suite command** | `npm run test -- --run && npm run build` |
@@ -38,7 +38,7 @@ created: 2026-04-08
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 01-01-01 | 01 | 1 | NAVG-03, NAVG-04 | setup | `npm install` | ✅ planned | ⬜ pending |
+| 01-01-01 | 01 | 1 | NAVG-03, NAVG-04 | setup + types | `npm install && npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
 | 01-01-02 | 01 | 1 | DEMO-01, NAVG-04 | static + types | `npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
 | 01-02-01 | 02 | 2 | NAVG-03, DEMO-01 | static + types | `npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
 | 01-02-02 | 02 | 2 | NAVG-03 | integration | `npm run test -- src/app/AppRouter.test.tsx --run` | ✅ planned | ⬜ pending |
@@ -55,11 +55,11 @@ created: 2026-04-08
 
 - [ ] `package.json` — install `react`, `react-dom`, `react-router`, `tailwindcss`, `@tailwindcss/vite`, `@fontsource-variable/manrope`
 - [ ] `vite.config.ts` — add `react()`, `tailwindcss()`, and `test.environment = "jsdom"`
-- [ ] `src/test/setup.ts` — shared RTL setup and cleanup hooks
+- [ ] `src/test/setup.ts` — shared RTL setup, DOM matcher registration, and cleanup hooks
 - [ ] `src/app/AppRouter.test.tsx` — covers root redirect, route availability, and SPA routing smoke tests
 - [ ] `src/shell/AppShell.test.tsx` — covers sidebar, header chrome, and shell persistence
 - [ ] `src/pages/RoutePlaceholders.test.tsx` — covers placeholder copy, not-found recovery, and demo-boundary visibility
-- [ ] Framework install: `npm install -D vitest jsdom @testing-library/react @testing-library/user-event`
+- [ ] Framework install: `npm install -D vitest jsdom @testing-library/react @testing-library/user-event @testing-library/jest-dom`
 
 ---
 
