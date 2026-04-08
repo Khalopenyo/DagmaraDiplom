@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Demo Shell & Boundaries | 0/4 | Not started | - |
+| 1. Demo Shell & Boundaries | 1/4 | In Progress|  |
 | 2. Dashboard & Rates Context | 0/TBD | Not started | - |
 | 3. Transfer Draft & Quote Transparency | 0/TBD | Not started | - |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
