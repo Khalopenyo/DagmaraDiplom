@@ -1,6 +1,7 @@
 import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
 import { getTopLevelRoute } from '../content/topLevelRoutes'
 import { AccountSummaryCard } from '../features/dashboard/AccountSummaryCard'
+import { QuickActionsGrid } from '../features/dashboard/QuickActionsGrid'
 import { ShellCard } from '../shell/ShellCard'
 
 const DASHBOARD_TITLE = 'Демонстрационный маршрут Россия → Китай'
@@ -36,6 +37,7 @@ export function DashboardPage() {
       </div>
 
       <AccountSummaryCard />
+      <QuickActionsGrid />
     </section>
   )
 }
