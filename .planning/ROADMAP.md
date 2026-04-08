@@ -30,9 +30,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User sees clear simulated-demo framing on the key screens so the prototype is not mistaken for a live banking product.
 **Plans**: 4 plans
 Plans:
-- [ ] `01-01-PLAN.md` — Safely bootstrap the Vite/Tailwind/Vitest workspace and replace the starter app with a demo-safe branded entry screen.
-- [ ] `01-02-PLAN.md` — Lock the Phase 1 router tree, route metadata, and canonical demo-copy constants.
-- [ ] `01-03-PLAN.md` — Build the persistent shell, shared header/sidebar primitives, and SPA navigation behavior.
+- [x] `01-01-PLAN.md` — Safely bootstrap the Vite/Tailwind/Vitest workspace and replace the starter app with a demo-safe branded entry screen.
+- [x] `01-02-PLAN.md` — Lock the Phase 1 router tree, route metadata, and canonical demo-copy constants.
+- [x] `01-03-PLAN.md` — Build the persistent shell, shared header/sidebar primitives, and SPA navigation behavior.
 - [ ] `01-04-PLAN.md` — Replace route stubs with demo-safe placeholder screens and phase-level content tests.
 **UI hint**: yes
 
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Demo Shell & Boundaries | 2/4 | In Progress|  |
+| 1. Demo Shell & Boundaries | 3/4 | In Progress|  |
 | 2. Dashboard & Rates Context | 0/TBD | Not started | - |
 | 3. Transfer Draft & Quote Transparency | 0/TBD | Not started | - |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
