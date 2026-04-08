@@ -1,10 +1,11 @@
 ---
 phase: 1
 slug: demo-shell-boundaries
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-04-08
+reviewed_at: 2026-04-08T06:01:17+03:00
 ---
 
 # Phase 1 — UI Design Contract
@@ -115,6 +116,12 @@ Accent reserved for: active sidebar item rail and tint, primary page CTA, focus-
 - To preserve mobile proportions, place page intros and placeholder cards inside a primary narrative column with `max-width: 760px` within the larger page container.
 - Default card padding is `24px`; use `32px` only for the first-screen intro card on `Главная`.
 
+## Visual Hierarchy Contract
+
+- On `Главная`, the accent-tinted intro card is the first visual anchor, the route title is the second anchor, and the primary CTA is the third anchor.
+- The sidebar provides orientation, not dominance: active-route treatment must be visible but visually subordinate to the main intro card.
+- Placeholder cards on secondary routes should never outshine the route title or the simulation boundary copy.
+
 ---
 
 ## Primitive Inventory
@@ -126,7 +133,7 @@ Accent reserved for: active sidebar item rail and tint, primary page CTA, focus-
 | `SidebarNavItem` | Height `48px`, `16px` horizontal padding, `12px` icon-to-label gap, `16px` corner radius. Active item uses accent-tinted background plus a `3px` accent rail. |
 | `TopHeader` | White surface with subtle bottom border. Left: greeting `Здравствуйте, Дагмара`. Center/right: faux-search. Far right: notifications button. |
 | `GlobalSearchStub` | Styled as a real search field with placeholder `Поиск по demo`, but Phase 1 stops at local focus and text entry only. No results popover, no submit flow, no remote lookup language. |
-| `NotificationButton` | Icon-only control at `44px` square. Show hover and focus states only. No dropdown, unread list, or numeric badge in Phase 1. |
+| `NotificationButton` | Icon-only control at `44px` square. Must include `aria-label="Уведомления"` and a tooltip or text alternative `Уведомления`. Show hover and focus states only. No dropdown, unread list, or numeric badge in Phase 1. |
 | `PageContainer` | Constrains top-level page title, disclaimer, and card stack to the centered content column. |
 | `ShellCard` | White surface, `24px` radius, `1px` soft border, optional soft shadow, `24px` padding, vertical stack with `16px` internal gap. |
 | `StatusBadge` | Pill height `32px`, `12px` horizontal padding, accent tint background, semibold `14px` text. The shell-level badge label is exactly `Simulated demo`. |
@@ -183,4 +190,4 @@ Accent reserved for: active sidebar item rail and tint, primary page CTA, focus-
 - [ ] Dimension 5 Spacing: PASS
 - [ ] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved with non-blocking visual recommendations folded in
