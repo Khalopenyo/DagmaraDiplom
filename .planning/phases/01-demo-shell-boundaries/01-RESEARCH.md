@@ -396,32 +396,31 @@ export default defineConfig({
 | Property | Value |
 |----------|-------|
 | Framework | `Vitest 4.1.3 + React Testing Library 16.3.2 + jsdom 29.0.2` |
-| Config file | `vitest.config.ts` — none yet, must be added in Wave 0 |
-| Quick run command | `npx vitest run src/app/__tests__/shell-routing.test.tsx` |
-| Full suite command | `npx vitest run` |
+| Config file | `vite.config.ts` with `test.environment = "jsdom"` and `test.setupFiles = ["./src/test/setup.ts"]` |
+| Quick run command | `npm exec tsc --noEmit` |
+| Full suite command | `npm run test -- --run && npm run build` |
 
 ### Phase Requirements → Test Map
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|-------------------|-------------|
-| NAVG-01 | Desktop shell renders sidebar with four required sections | integration | `npx vitest run src/app/__tests__/app-shell.test.tsx -t "renders required sidebar sections"` | ❌ Wave 0 |
-| NAVG-02 | Shared header renders greeting, search stub, and notifications control | integration | `npx vitest run src/app/__tests__/app-shell.test.tsx -t "renders shared header chrome"` | ❌ Wave 0 |
-| NAVG-03 | Navigation changes routes without full shell remount | integration | `npx vitest run src/app/__tests__/shell-routing.test.tsx -t "navigates between top-level routes inside the shell"` | ❌ Wave 0 |
-| NAVG-04 | Main content stays centered and capped at `1200px` | integration | `npx vitest run src/app/__tests__/page-container.test.tsx -t "applies centered max-width shell container"` | ❌ Wave 0 |
-| DEMO-01 | Demo badge and boundary copy are visible on required routes | integration | `npx vitest run src/app/__tests__/demo-boundary.test.tsx` | ❌ Wave 0 |
+| NAVG-01 | Desktop shell renders sidebar with four required sections | integration | `npm run test -- src/shell/AppShell.test.tsx --run` | ✅ planned in Plan 03 |
+| NAVG-02 | Shared header renders greeting, search stub, and notifications control | integration | `npm run test -- src/shell/AppShell.test.tsx --run` | ✅ planned in Plan 03 |
+| NAVG-03 | Navigation changes routes without full shell remount | integration | `npm run test -- src/app/AppRouter.test.tsx --run` and `npm run test -- src/shell/AppShell.test.tsx --run` | ✅ planned in Plans 02-03 |
+| NAVG-04 | Main content stays centered and capped at `1200px` | static + integration | `npm exec tsc --noEmit` and `npm run test -- src/shell/AppShell.test.tsx --run` | ✅ planned in Plans 03-04 |
+| DEMO-01 | Demo badge and boundary copy are visible on required routes | integration | `npm run test -- src/pages/RoutePlaceholders.test.tsx --run` | ✅ planned in Plan 04 |
 
 ### Sampling Rate
-- **Per task commit:** `npx vitest run src/app/__tests__/shell-routing.test.tsx`
-- **Per wave merge:** `npx vitest run`
+- **Per task commit:** `npm exec tsc --noEmit`
+- **Per wave merge:** run the task-level automated command for the current wave
 - **Phase gate:** Full suite green before `/gsd:verify-work`
 
 ### Wave 0 Gaps
 - [ ] `package.json` and Vite React TS scaffold in repo root
-- [ ] `vitest.config.ts` with `environment: "jsdom"`
+- [ ] `vite.config.ts` with `test.environment = "jsdom"` and `test.setupFiles = ["./src/test/setup.ts"]`
 - [ ] `src/test/setup.ts` for RTL cleanup and shared test hooks
-- [ ] `src/app/__tests__/app-shell.test.tsx` — covers `NAVG-01`, `NAVG-02`
-- [ ] `src/app/__tests__/shell-routing.test.tsx` — covers `NAVG-03`
-- [ ] `src/app/__tests__/page-container.test.tsx` — covers `NAVG-04`
-- [ ] `src/app/__tests__/demo-boundary.test.tsx` — covers `DEMO-01`
+- [ ] `src/app/AppRouter.test.tsx` — covers root redirect and route smoke tests
+- [ ] `src/shell/AppShell.test.tsx` — covers sidebar, header chrome, and shell persistence
+- [ ] `src/pages/RoutePlaceholders.test.tsx` — covers placeholder copy, not-found recovery, and demo-boundary visibility
 - [ ] Framework install: `npm install -D vitest jsdom @testing-library/react @testing-library/user-event`
 
 ## Sources

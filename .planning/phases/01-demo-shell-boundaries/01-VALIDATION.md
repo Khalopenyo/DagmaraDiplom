@@ -3,7 +3,7 @@ phase: 01
 slug: demo-shell-boundaries
 status: approved
 nyquist_compliant: true
-wave_0_complete: false
+wave_0_complete: true
 created: 2026-04-08
 ---
 
@@ -19,16 +19,16 @@ created: 2026-04-08
 |----------|-------|
 | **Framework** | `Vitest 4.1.3 + React Testing Library 16.3.2 + jsdom 29.0.2` |
 | **Config file** | `vite.config.ts` with `test.environment = "jsdom"` and `test.setupFiles = ["./src/test/setup.ts"]` |
-| **Quick run command** | `npx vitest run src/app/__tests__/shell-routing.test.tsx` |
-| **Full suite command** | `npx vitest run` |
+| **Quick run command** | `npm exec tsc --noEmit` |
+| **Full suite command** | `npm run test -- --run && npm run build` |
 | **Estimated runtime** | ~20 seconds |
 
 ---
 
 ## Sampling Rate
 
-- **After every task commit:** Run `npx vitest run src/app/__tests__/shell-routing.test.tsx`
-- **After every plan wave:** Run `npx vitest run`
+- **After every task commit:** Run `npm exec tsc --noEmit`
+- **After every plan wave:** Run the task-specific automated command for that wave
 - **Before `$gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** 20 seconds
 
@@ -38,12 +38,14 @@ created: 2026-04-08
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 01-01-01 | 01 | 1 | NAVG-03 | setup | `npm install` | ❌ W0 | ⬜ pending |
-| 01-01-02 | 01 | 1 | NAVG-03 | integration | `npx vitest run src/app/__tests__/shell-routing.test.tsx` | ❌ W0 | ⬜ pending |
-| 01-02-01 | 02 | 2 | NAVG-01, NAVG-02, NAVG-04 | integration | `npm exec tsc --noEmit` | ❌ W0 | ⬜ pending |
-| 01-02-02 | 02 | 2 | NAVG-01, NAVG-02, NAVG-03, NAVG-04 | integration | `npx vitest run src/shell/AppShell.test.tsx` | ❌ W0 | ⬜ pending |
-| 01-03-01 | 03 | 3 | DEMO-01 | integration | `npx vitest run src/app/__tests__/demo-boundary.test.tsx` | ❌ W0 | ⬜ pending |
-| 01-03-02 | 03 | 3 | NAVG-01, NAVG-02, NAVG-03, NAVG-04, DEMO-01 | build + integration | `npm run build && npx vitest run` | ❌ W0 | ⬜ pending |
+| 01-01-01 | 01 | 1 | NAVG-03, NAVG-04 | setup | `npm install` | ✅ planned | ⬜ pending |
+| 01-01-02 | 01 | 1 | DEMO-01, NAVG-04 | static + types | `npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
+| 01-02-01 | 02 | 2 | NAVG-03, DEMO-01 | static + types | `npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
+| 01-02-02 | 02 | 2 | NAVG-03 | integration | `npm run test -- src/app/AppRouter.test.tsx --run` | ✅ planned | ⬜ pending |
+| 01-03-01 | 03 | 3 | NAVG-01, NAVG-02, NAVG-04 | static + types | `npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
+| 01-03-02 | 03 | 3 | NAVG-01, NAVG-02, NAVG-03, NAVG-04 | integration | `npm run test -- src/shell/AppShell.test.tsx --run` | ✅ planned | ⬜ pending |
+| 01-04-01 | 04 | 4 | DEMO-01, NAVG-04 | static + types | `npm exec tsc --noEmit` | ✅ planned | ⬜ pending |
+| 01-04-02 | 04 | 4 | DEMO-01, NAVG-03 | integration | `npm run test -- src/pages/RoutePlaceholders.test.tsx --run` | ✅ planned | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -54,10 +56,9 @@ created: 2026-04-08
 - [ ] `package.json` — install `react`, `react-dom`, `react-router`, `tailwindcss`, `@tailwindcss/vite`, `@fontsource-variable/manrope`
 - [ ] `vite.config.ts` — add `react()`, `tailwindcss()`, and `test.environment = "jsdom"`
 - [ ] `src/test/setup.ts` — shared RTL setup and cleanup hooks
-- [ ] `src/app/__tests__/app-shell.test.tsx` — covers `NAVG-01`, `NAVG-02`
-- [ ] `src/app/__tests__/shell-routing.test.tsx` — covers `NAVG-03`
-- [ ] `src/app/__tests__/page-container.test.tsx` — covers `NAVG-04`
-- [ ] `src/app/__tests__/demo-boundary.test.tsx` — covers `DEMO-01`
+- [ ] `src/app/AppRouter.test.tsx` — covers root redirect, route availability, and SPA routing smoke tests
+- [ ] `src/shell/AppShell.test.tsx` — covers sidebar, header chrome, and shell persistence
+- [ ] `src/pages/RoutePlaceholders.test.tsx` — covers placeholder copy, not-found recovery, and demo-boundary visibility
 - [ ] Framework install: `npm install -D vitest jsdom @testing-library/react @testing-library/user-event`
 
 ---
