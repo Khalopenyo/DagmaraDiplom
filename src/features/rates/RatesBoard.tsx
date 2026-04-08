@@ -33,7 +33,7 @@ export function RatesBoard() {
         </h2>
         <p className="text-sm leading-6 text-[var(--color-text-muted)]">
           Справочник показывает фиксированные симулированные значения для
-          corridor `Россия → Китай` и reference-only строк для дружественных
+          маршрута Россия → Китай и reference-only строк для дружественных
           стран.
         </p>
       </div>
