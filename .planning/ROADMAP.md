@@ -60,7 +60,11 @@ Plans:
   2. User can enter a debit amount and immediately see the recipient amount recalculated from the selected simulated rate.
   3. User sees the conversion preview before confirmation, including rate, debit amount, recipient amount, platform fee, and итог.
   4. User cannot continue when required fields are missing or when the entered amount exceeds the available balance.
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] `03-01-PLAN.md` — Create transfer-specific seed data, quote helpers, and validation tests under the shared demo layer.
+- [ ] `03-02-PLAN.md` — Replace the transfers placeholder with the editable draft form, source-account selector, mode switch, and favorite-recipient interactions.
+- [ ] `03-03-PLAN.md` — Add derived quote preview, deterministic fee/total breakdown, and confirm gating tests for the transfer route.
 **UI hint**: yes
 
 ### Phase 4: Transaction Simulation & Receipt
@@ -94,6 +98,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Demo Shell & Boundaries | 4/4 | Complete   | 2026-04-08 |
 | 2. Dashboard & Rates Context | 3/3 | Complete | 2026-04-08 |
-| 3. Transfer Draft & Quote Transparency | 0/TBD | Not started | - |
+| 3. Transfer Draft & Quote Transparency | 0/3 | Planned | - |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
 | 5. Demo Reset & Settings | 0/TBD | Not started | - |
