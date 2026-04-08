@@ -13,7 +13,7 @@ This roadmap delivers a frontend-only desktop SPA for one diploma-ready transfer
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Demo Shell & Boundaries** - Establish the desktop SPA shell, navigation, and visible simulation framing. (completed 2026-04-08)
-- [ ] **Phase 2: Dashboard & Rates Context** - Show the seeded account context and simulated corridor rates before editing a transfer.
+- [x] **Phase 2: Dashboard & Rates Context** - Show the seeded account context and simulated corridor rates before editing a transfer. (completed 2026-04-08)
 - [ ] **Phase 3: Transfer Draft & Quote Transparency** - Let the user compose a transfer and inspect the conversion before submission.
 - [ ] **Phase 4: Transaction Simulation & Receipt** - Submit the transfer, simulate deterministic processing, and present the final cheque.
 - [ ] **Phase 5: Demo Reset & Settings** - Explain the prototype boundaries and reset the seeded demo state for repeated presentations.
@@ -93,7 +93,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Demo Shell & Boundaries | 4/4 | Complete   | 2026-04-08 |
-| 2. Dashboard & Rates Context | 3/3 | In Progress | - |
+| 2. Dashboard & Rates Context | 3/3 | Complete | 2026-04-08 |
 | 3. Transfer Draft & Quote Transparency | 0/TBD | Not started | - |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
 | 5. Demo Reset & Settings | 0/TBD | Not started | - |

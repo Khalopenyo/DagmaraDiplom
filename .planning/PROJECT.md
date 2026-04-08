@@ -14,15 +14,18 @@
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Phase 2 validated seeded dashboard context: one fixed account card for `Дагмара`, masked number `4756 •••• •••• 9018`, starting balance `3 469.52 ЦР`, and eight quick actions with only `Переводы` live.
+- [x] Phase 2 validated simulated rates context: a read-only three-row CBDC directory for Китай, Вьетнам и Южная Корея, with China visually primary and the other two rows reference-only.
 
 ### Active
 
-- [ ] Показать дашборд цифрового счета с балансом, карточкой счета и быстрыми действиями в desktop-компоновке.
-- [ ] Дать пользователю справочник курсов цифровых валют дружественных стран по отношению к цифровому рублю.
 - [ ] Смоделировать основной флоу трансграничного перевода: выбор счета, способа перевода, получателя, суммы списания и суммы получения после конвертации.
 - [ ] Визуализировать процесс прохождения транзакции через шлюзы центральных банков с поэтапным статусом и электронным чеком.
 - [ ] Адаптировать существующий мобильный UI-дизайн под десктопный веб-интерфейс с боковой навигацией, верхней панелью и ограниченной шириной контента.
+
+## Current State
+
+Phase 2 complete: dashboard and rates routes are live, seeded, and test-covered inside the desktop shell. The next active concern is Phase 3, where the fixed Russia -> China corridor moves from read-only context into an editable transfer draft with visible quote math and validation.
 
 ### Out of Scope
 
@@ -78,4 +81,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 after initialization*
+*Last updated: 2026-04-08 after Phase 2 completion*
