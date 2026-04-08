@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -23,6 +23,7 @@ describe('Route placeholders', () => {
 
       expect(
         screen.getByRole('heading', {
+          level: 1,
           name: heading,
         }),
       ).toBeInTheDocument()
@@ -31,7 +32,7 @@ describe('Route placeholders', () => {
     },
   )
 
-  it('navigates from the dashboard placeholder to the transfers route', async () => {
+  it('navigates from the dashboard route to the transfers route', async () => {
     const user = userEvent.setup()
 
     renderApp(<AppRoutes />, { route: '/dashboard' })
@@ -49,8 +50,8 @@ describe('Route placeholders', () => {
     ).toBeInTheDocument()
   })
 
-  it.each(['/transfers', '/rates', '/settings'] as const)(
-    'navigates back to the dashboard placeholder from %s',
+  it.each(['/transfers', '/settings'] as const)(
+    'navigates back to the dashboard route from %s',
     async (route) => {
       const user = userEvent.setup()
 
@@ -64,11 +65,33 @@ describe('Route placeholders', () => {
 
       expect(
         screen.getByRole('heading', {
+          level: 1,
           name: 'Демонстрационный маршрут Россия → Китай',
         }),
       ).toBeInTheDocument()
     },
   )
+
+  it('navigates back to the dashboard route from /rates via the sidebar shell', async () => {
+    const user = userEvent.setup()
+
+    renderApp(<AppRoutes />, { route: '/rates' })
+
+    const navigation = screen.getByRole('navigation')
+
+    await user.click(
+      within(navigation).getByRole('link', {
+        name: 'Главная',
+      }),
+    )
+
+    expect(
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Демонстрационный маршрут Россия → Китай',
+      }),
+    ).toBeInTheDocument()
+  })
 
   it('renders the approved not-found recovery card inside the shell', async () => {
     const user = userEvent.setup()
@@ -86,6 +109,7 @@ describe('Route placeholders', () => {
 
     expect(
       screen.getByRole('heading', {
+        level: 1,
         name: 'Демонстрационный маршрут Россия → Китай',
       }),
     ).toBeInTheDocument()

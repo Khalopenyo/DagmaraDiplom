@@ -20,6 +20,7 @@ describe('AppRoutes', () => {
 
     expect(
       screen.getByRole('heading', {
+        level: 1,
         name: 'Обмен валют',
       }),
     ).toBeInTheDocument()

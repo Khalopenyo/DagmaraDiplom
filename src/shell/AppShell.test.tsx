@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 
@@ -9,10 +9,20 @@ describe('AppShell', () => {
   it('renders the persistent shell around the dashboard route', () => {
     renderApp(<AppRoutes />, { route: '/dashboard' })
 
-    expect(screen.getByRole('link', { name: 'Главная' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Переводы' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Обмен валют' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Настройки' })).toBeInTheDocument()
+    const navigation = screen.getByRole('navigation')
+
+    expect(
+      within(navigation).getByRole('link', { name: 'Главная' }),
+    ).toBeInTheDocument()
+    expect(
+      within(navigation).getByRole('link', { name: 'Переводы' }),
+    ).toBeInTheDocument()
+    expect(
+      within(navigation).getByRole('link', { name: 'Обмен валют' }),
+    ).toBeInTheDocument()
+    expect(
+      within(navigation).getByRole('link', { name: 'Настройки' }),
+    ).toBeInTheDocument()
     expect(screen.getByText('Здравствуйте, Дагмара')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Поиск по demo')).toBeInTheDocument()
     expect(
@@ -32,11 +42,16 @@ describe('AppShell', () => {
     renderApp(<AppRoutes />, { route: '/dashboard' })
 
     const searchInput = screen.getByPlaceholderText('Поиск по demo')
+    const navigation = screen.getByRole('navigation')
+
     await user.type(searchInput, 'demo')
-    await user.click(screen.getByRole('link', { name: 'Обмен валют' }))
+    await user.click(
+      within(navigation).getByRole('link', { name: 'Обмен валют' }),
+    )
 
     expect(
       screen.getByRole('heading', {
+        level: 1,
         name: 'Обмен валют',
       }),
     ).toBeInTheDocument()
