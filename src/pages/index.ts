@@ -1,0 +1,5 @@
+export { DashboardPage } from './DashboardPage'
+export { TransfersPage } from './TransfersPage'
+export { RatesPage } from './RatesPage'
+export { SettingsPage } from './SettingsPage'
+export { NotFoundPage } from './NotFoundPage'
