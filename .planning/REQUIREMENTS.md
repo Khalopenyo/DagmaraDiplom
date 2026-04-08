@@ -81,38 +81,38 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NAVG-01 | TBD | Pending |
-| NAVG-02 | TBD | Pending |
-| NAVG-03 | TBD | Pending |
-| NAVG-04 | TBD | Pending |
-| DASH-01 | TBD | Pending |
-| DASH-02 | TBD | Pending |
-| DASH-03 | TBD | Pending |
-| RATE-01 | TBD | Pending |
-| RATE-02 | TBD | Pending |
-| RATE-03 | TBD | Pending |
-| XFER-01 | TBD | Pending |
-| XFER-02 | TBD | Pending |
-| XFER-03 | TBD | Pending |
-| XFER-04 | TBD | Pending |
-| XFER-05 | TBD | Pending |
-| XFER-06 | TBD | Pending |
-| XFER-07 | TBD | Pending |
-| XFER-08 | TBD | Pending |
-| TRCK-01 | TBD | Pending |
-| TRCK-02 | TBD | Pending |
-| TRCK-03 | TBD | Pending |
-| TRCK-04 | TBD | Pending |
-| TRCK-05 | TBD | Pending |
-| DEMO-01 | TBD | Pending |
-| DEMO-02 | TBD | Pending |
-| SETT-01 | TBD | Pending |
+| NAVG-01 | Phase 1 | Pending |
+| NAVG-02 | Phase 1 | Pending |
+| NAVG-03 | Phase 1 | Pending |
+| NAVG-04 | Phase 1 | Pending |
+| DASH-01 | Phase 2 | Pending |
+| DASH-02 | Phase 2 | Pending |
+| DASH-03 | Phase 2 | Pending |
+| RATE-01 | Phase 2 | Pending |
+| RATE-02 | Phase 2 | Pending |
+| RATE-03 | Phase 2 | Pending |
+| XFER-01 | Phase 3 | Pending |
+| XFER-02 | Phase 3 | Pending |
+| XFER-03 | Phase 3 | Pending |
+| XFER-04 | Phase 3 | Pending |
+| XFER-05 | Phase 3 | Pending |
+| XFER-06 | Phase 3 | Pending |
+| XFER-07 | Phase 3 | Pending |
+| XFER-08 | Phase 4 | Pending |
+| TRCK-01 | Phase 4 | Pending |
+| TRCK-02 | Phase 4 | Pending |
+| TRCK-03 | Phase 4 | Pending |
+| TRCK-04 | Phase 4 | Pending |
+| TRCK-05 | Phase 4 | Pending |
+| DEMO-01 | Phase 1 | Pending |
+| DEMO-02 | Phase 5 | Pending |
+| SETT-01 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 26 total
-- Mapped to phases: 0
-- Unmapped: 26 ⚠️
+- Mapped to phases: 26
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-04-08*
-*Last updated: 2026-04-08 after initial definition*
+*Last updated: 2026-04-08 after roadmap creation*
