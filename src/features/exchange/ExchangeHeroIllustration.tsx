@@ -5,7 +5,7 @@ export function ExchangeHeroIllustration() {
     <img
       alt=""
       aria-hidden="true"
-      className="h-auto w-full max-w-[680px]"
+      className="h-auto w-full max-w-[560px] sm:max-w-[600px]"
       src={exchangeHeroIllustration}
     />
   )

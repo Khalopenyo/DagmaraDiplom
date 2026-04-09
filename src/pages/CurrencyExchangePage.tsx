@@ -67,8 +67,8 @@ export function CurrencyExchangePage() {
       : '/transfers'
 
   return (
-    <section className="flex w-full flex-col gap-8 pb-8">
-      <div className="flex items-start gap-4">
+    <section className="flex w-full flex-col gap-4 pb-4">
+      <div className="flex items-start gap-3">
         <Link
           aria-label="Назад к курсам валют"
           className="mt-1 inline-flex h-10 w-10 items-center justify-center rounded-full text-[34px] leading-none text-[var(--color-text-strong)] transition-colors duration-150 hover:bg-[rgba(66,54,198,0.08)]"
@@ -77,7 +77,7 @@ export function CurrencyExchangePage() {
           <span aria-hidden="true">‹</span>
         </Link>
 
-        <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex min-w-0 flex-col gap-2">
           <h1 className="text-[34px] font-semibold leading-none tracking-[-0.04em] text-[var(--color-text-strong)]">
             Обмен
           </h1>
@@ -94,15 +94,15 @@ export function CurrencyExchangePage() {
         </div>
       </div>
 
-      <div className="flex justify-center px-2 py-2 sm:px-6">
-        <div className="w-full max-w-[760px]">
+      <div className="flex justify-center px-2 pt-0 pb-1 sm:px-6">
+        <div className="w-full max-w-[700px]">
           <ExchangeHeroIllustration />
         </div>
       </div>
 
-      <section className="w-full rounded-[34px] border-[3px] border-[#2F80ED] bg-white px-4 py-5 shadow-[0_24px_64px_rgba(47,128,237,0.12)] sm:px-5 sm:py-6">
-        <div className="flex flex-col gap-6 rounded-[28px] bg-white">
-          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
+      <section className="-mt-2 w-full rounded-[34px] border-[3px] border-[#2F80ED] bg-white px-4 py-4 shadow-[0_24px_64px_rgba(47,128,237,0.12)] sm:-mt-4 sm:px-5 sm:py-5">
+        <div className="flex flex-col gap-5 rounded-[28px] bg-white">
+          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-3.5 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
             <input
               aria-label="Сумма списания в ЦР"
               className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none placeholder:text-[rgba(43,56,92,0.36)]"
@@ -132,7 +132,7 @@ export function CurrencyExchangePage() {
             </span>
           </div>
 
-          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
+          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-3.5 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
             <input
               aria-label={`Сумма получения в ${selectedRate.targetCurrencyLabel}`}
               className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none"
