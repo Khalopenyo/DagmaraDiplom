@@ -28,22 +28,7 @@ export function QuickActionsGrid() {
   assertQuickActionContract()
 
   return (
-    <section
-      aria-labelledby="dashboard-quick-actions-heading"
-      className="flex flex-col gap-5"
-    >
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2
-          className="text-lg font-semibold text-[var(--color-text-strong)] sm:text-xl"
-          id="dashboard-quick-actions-heading"
-        >
-          {QUICK_ACTIONS_HEADING}
-        </h2>
-        <p className="max-w-[28ch] text-xs font-medium uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
-          Адаптировано из mobile dashboard в desktop-grid
-        </p>
-      </div>
-
+    <section aria-label={QUICK_ACTIONS_HEADING} className="flex flex-col gap-5">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {quickActions.map((action) => (
           <QuickActionTile action={action} key={action.label} />

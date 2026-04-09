@@ -47,12 +47,8 @@ export function AccountSummaryCard() {
 
         <div className="relative flex flex-col gap-7">
           <div className="flex flex-col gap-3">
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-white/74">
-              Цифровой счет
-            </p>
             <h2 className="text-[30px] font-semibold leading-[1.1] tracking-[-0.04em]">
-              <span>{accountSummary.ownerName}</span>
-              <span className="text-white/78"> A</span>
+              {accountSummary.ownerName}
             </h2>
             <p className="text-lg tracking-[0.02em] text-white/84">
               {accountSummary.maskedAccountNumber}
@@ -65,9 +61,6 @@ export function AccountSummaryCard() {
                 ₽
               </span>
               <div className="flex flex-col gap-1">
-                <p className="text-sm leading-6 text-white/72">
-                  Баланс для маршрута Россия → Китай
-                </p>
                 <p className="text-[36px] font-semibold leading-[1.05] tracking-[-0.05em] text-white">
                   {balanceLabel}
                 </p>
