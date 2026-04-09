@@ -37,7 +37,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
       'Здесь появится справочник симулированных курсов дружественных стран. Не показывать фактическую таблицу до Phase 2.',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'inline-helper',
-    contentWidth: 'narrow',
+    contentWidth: 'full',
   },
   {
     path: '/settings',

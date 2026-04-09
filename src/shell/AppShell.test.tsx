@@ -58,7 +58,7 @@ describe('AppShell', () => {
     expect(searchInput).toHaveValue('demo')
   })
 
-  it('keeps the shell container while letting the dashboard expand to full width', async () => {
+  it('keeps the shell container while letting dashboard and rates expand to full width', async () => {
     const user = userEvent.setup()
 
     renderApp(<AppRoutes />, { route: '/dashboard' })
@@ -71,6 +71,12 @@ describe('AppShell', () => {
     expect(pageContainer.className).toContain('pt-8')
     expect(pageContainer.className).toContain('pb-12')
     expect(dashboardContent.className).toContain('max-w-none')
+
+    await user.click(screen.getByRole('link', { name: 'Обмен валют' }))
+
+    const ratesContent = screen.getByTestId('page-content')
+
+    expect(ratesContent.className).toContain('max-w-none')
 
     await user.click(screen.getByRole('link', { name: 'Настройки' }))
 
