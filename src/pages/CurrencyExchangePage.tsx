@@ -4,6 +4,7 @@ import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-r
 import { cbdcRates, formatRateValue, type DemoCountryBadgeToken } from '../demo'
 import { ExchangeHeroIllustration } from '../features/exchange/ExchangeHeroIllustration'
 import { CountryFlagBadge } from '../features/rates/flagBadges'
+import { useLiveCbdcRates } from '../features/rates/useLiveCbdcRates'
 
 const DEFAULT_DEBIT_AMOUNT = '1000'
 const BASE_CURRENCY_LABEL = 'ЦР'
@@ -90,7 +91,8 @@ export function CurrencyExchangePage() {
   const { badgeToken } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const selectedRate = cbdcRates.find(
+  const rates = useLiveCbdcRates()
+  const selectedRate = rates.find(
     (rate) => rate.badgeToken === badgeToken,
   )
   const [debitAmount, setDebitAmount] = useState(DEFAULT_DEBIT_AMOUNT)
@@ -145,7 +147,7 @@ export function CurrencyExchangePage() {
       currencyLabel: BASE_CURRENCY_LABEL,
       primary: false,
     },
-    ...cbdcRates.map((rate) => ({
+    ...rates.map((rate) => ({
       badgeToken: rate.badgeToken,
       country: rate.country,
       currencyLabel: rate.targetCurrencyLabel,

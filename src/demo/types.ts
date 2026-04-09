@@ -59,6 +59,7 @@ export interface DemoCbdcRate {
   corridor: DemoCorridorMode
   baseLabel: '1 ЦР'
   targetCurrencyLabel: 'ЦВ' | 'ЦН' | 'ЦК' | 'ЦИ' | 'ЦЮ' | 'ЦП' | 'ЦФ'
+  forexCode: 'VND' | 'NIO' | 'KRW' | 'INR' | 'CNY' | 'EUR'
   rateValue: number
 }
 
