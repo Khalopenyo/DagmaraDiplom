@@ -22,6 +22,7 @@ interface TransferDraftFormProps {
   amountError?: string | null
   onDebitAmountChange: (value: string) => void
   onFavoriteSelect: (favoriteId: DemoFavoriteRecipient['id']) => void
+  onConfirm: () => void
   onModeChange: (modeId: DemoTransferModeId) => void
   onRecipientIdentifierChange: (value: string) => void
   onTargetCurrencyChange: (badgeToken: DemoCountryBadgeToken) => void
@@ -70,6 +71,7 @@ export function TransferDraftForm({
   debitAmount,
   onDebitAmountChange,
   onFavoriteSelect,
+  onConfirm,
   onModeChange,
   onRecipientIdentifierChange,
   onTargetCurrencyChange,
@@ -216,6 +218,21 @@ export function TransferDraftForm({
           {identifierError ? <ValidationHint message={identifierError} /> : null}
 
           <label className="flex items-center gap-3 rounded-[16px] border border-[rgba(24,38,58,0.14)] bg-white px-4 py-3">
+            <CurrencyIcon accentClassName="text-[rgba(92,72,57,0.9)]" symbol="₽" />
+            <input
+              aria-label="Сумма списания"
+              className="min-h-10 flex-1 border-0 bg-transparent px-0 py-0 text-base text-[var(--color-text-strong)] outline-none placeholder:text-[var(--color-text-muted)]"
+              inputMode="decimal"
+              onChange={(event) => onDebitAmountChange(event.target.value)}
+              placeholder="100"
+              type="text"
+              value={debitAmount}
+            />
+          </label>
+
+          {amountError ? <ValidationHint message={amountError} /> : null}
+
+          <label className="flex items-center gap-3 rounded-[16px] border border-[rgba(24,38,58,0.14)] bg-white px-4 py-3">
             <CurrencyIcon
               accentClassName="text-[rgba(92,72,57,0.9)]"
               symbol={quote.recipientCurrencySymbol}
@@ -230,21 +247,6 @@ export function TransferDraftForm({
               value={stripCurrencyMarker(quote.recipientAmountDisplay)}
             />
           </label>
-
-          <label className="flex items-center gap-3 rounded-[16px] border border-[rgba(24,38,58,0.14)] bg-white px-4 py-3">
-            <CurrencyIcon accentClassName="text-[rgba(92,72,57,0.9)]" symbol="₽" />
-            <input
-              aria-label="Сумма списания"
-              className="min-h-10 flex-1 border-0 bg-transparent px-0 py-0 text-base text-[var(--color-text-strong)] outline-none placeholder:text-[var(--color-text-muted)]"
-              inputMode="decimal"
-              onChange={(event) => onDebitAmountChange(event.target.value)}
-              placeholder="100"
-              type="text"
-              value={debitAmount}
-            />
-          </label>
-
-          {amountError ? <ValidationHint message={amountError} /> : null}
         </div>
 
         <div className="grid gap-2 rounded-[18px] bg-[rgba(62,56,199,0.04)] px-4 py-4">
@@ -275,6 +277,7 @@ export function TransferDraftForm({
               : 'cursor-not-allowed bg-[rgba(62,56,199,0.18)] text-white/80'
           }`}
           disabled={!canConfirm}
+          onClick={onConfirm}
           type="button"
         >
           Подтвердить

@@ -1,11 +1,15 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AppRoutes } from '../app/AppRoutes'
 import { renderApp } from '../test/renderApp'
 
 describe('TransfersPage', () => {
+  beforeEach(() => {
+    window.sessionStorage.clear()
+  })
+
   it('renders the redesigned transfer heading, seeded source account and balance', () => {
     renderApp(<AppRoutes />, { route: '/transfers' })
 
@@ -138,14 +142,13 @@ describe('TransfersPage', () => {
     expect(screen.getByLabelText('Сумма получения в ЦИ')).toHaveValue('36 100.00')
   })
 
-  it('keeps confirm disabled for invalid drafts and enables it only for a valid one', async () => {
+  it('keeps confirm disabled for invalid drafts and opens a dynamic receipt for a valid one', async () => {
     const user = userEvent.setup()
 
     renderApp(<AppRoutes />, { route: '/transfers' })
 
     const confirmButton = screen.getByRole('button', { name: 'Подтвердить' })
     const amountInput = screen.getByLabelText('Сумма списания')
-    const recipientInput = screen.getByLabelText('Номер счета')
 
     expect(confirmButton).toBeDisabled()
 
@@ -153,7 +156,11 @@ describe('TransfersPage', () => {
     expect(confirmButton).toBeDisabled()
 
     await user.clear(amountInput)
-    await user.type(recipientInput, '2200000000001746')
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Justin',
+      }),
+    )
     await user.type(amountInput, '100')
 
     expect(confirmButton).toBeEnabled()
@@ -162,13 +169,17 @@ describe('TransfersPage', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: 'Трансграничный перевод',
+        name: 'Электронный чек',
       }),
     ).toBeInTheDocument()
+    expect(screen.getByText('Дагмара')).toBeInTheDocument()
+    expect(screen.getByText('Justin')).toBeInTheDocument()
+    expect(screen.getByText('2200 0000 0000 5151')).toBeInTheDocument()
+    expect(screen.getByText('100 ₽')).toBeInTheDocument()
+    expect(screen.getByText('10 ₽')).toBeInTheDocument()
+    expect(screen.getByText('110 ₽')).toBeInTheDocument()
     expect(
-      screen.getByRole('button', {
-        name: 'Подтвердить',
-      }),
+      screen.getByText(/^#\d{7}$/),
     ).toBeInTheDocument()
   })
 })

@@ -115,3 +115,16 @@ export interface DemoTransferDraftValidationResult {
   identifierError: string | null
   amountError: string | null
 }
+
+export interface DemoTransferReceipt {
+  senderName: string
+  recipientName: string
+  contactLabel: 'Номер счета' | 'Номер телефона'
+  contactValue: string
+  transactionCode: string
+  transferCreatedDate: string
+  recipientSettlementDate: string
+  debitAmountDisplay: string
+  feeAmountDisplay: string
+  totalAmountDisplay: string
+}

@@ -7,6 +7,7 @@ import {
   NotFoundPage,
   RatesPage,
   SettingsPage,
+  TransferReceiptPage,
   TransfersPage,
 } from '../pages'
 
@@ -17,6 +18,7 @@ export function AppRoutes() {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/transfers" element={<TransfersPage />} />
+        <Route path="/transfers/receipt" element={<TransferReceiptPage />} />
         <Route path="/rates/exchange/:badgeToken" element={<CurrencyExchangePage />} />
         <Route path="/rates" element={<RatesPage />} />
         <Route path="/settings" element={<SettingsPage />} />

@@ -11,6 +11,9 @@ export {
 } from './formatters'
 export { quickActions } from './quickActions'
 export {
+  buildTransferReceipt,
+} from './transferReceipt'
+export {
   buildTransferQuote,
   LOCKED_CHINA_RATE,
   LOCKED_CHINA_RATE_LABEL,
@@ -36,5 +39,6 @@ export type {
   DemoTransferMode,
   DemoTransferModeId,
   DemoTransferQuote,
+  DemoTransferReceipt,
   DemoTransferSourceAccount,
 } from './types'

@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router'
+import { Link, useNavigate, useSearchParams } from 'react-router'
 
 import {
+  buildTransferReceipt,
   buildTransferQuote,
   cbdcRates,
   favoriteRecipients,
   transferModes,
+  transferSourceAccounts,
   validateTransferDraft,
   type DemoCountryBadgeToken,
   type DemoFavoriteRecipient,
@@ -15,6 +17,7 @@ import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
 import { getTopLevelRoute } from '../content/topLevelRoutes'
 import { useLiveCbdcRates } from '../features/rates/useLiveCbdcRates'
 import { TransferDraftForm } from '../features/transfers/TransferDraftForm'
+import { saveTransferReceipt } from '../features/transfers/transferReceiptStorage'
 
 const TRANSFERS_TITLE = 'Переводы'
 const TRANSFERS_HEADING = 'Трансграничный перевод'
@@ -81,6 +84,7 @@ function getSeededTargetBadgeToken(searchParams: URLSearchParams): DemoCountryBa
 
 export function TransfersPage() {
   getTransfersRoute()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { rates } = useLiveCbdcRates()
   const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
@@ -129,8 +133,36 @@ export function TransfersPage() {
     setRecipientIdentifier(getFavoriteIdentifier(favoriteId, selectedModeId))
   }
 
+  function handleConfirm() {
+    if (!validation.isValid) {
+      return
+    }
+
+    const sourceAccount = transferSourceAccounts[0]
+
+    if (!sourceAccount) {
+      throw new Error('Transfer source account seed is missing.')
+    }
+
+    const selectedFavorite = selectedFavoriteId
+      ? favoriteRecipients.find((favorite) => favorite.id === selectedFavoriteId) ?? null
+      : null
+
+    saveTransferReceipt(
+      buildTransferReceipt({
+        senderName: sourceAccount.ownerName,
+        recipientIdentifier,
+        selectedFavorite,
+        mode: selectedModeId,
+        quote,
+      }),
+    )
+
+    void navigate('/transfers/receipt')
+  }
+
   return (
-    <section className="mx-auto flex w-full max-w-[780px] flex-col gap-5 pb-6">
+    <section className="flex w-full flex-col gap-5 pb-6">
       <p className="sr-only">{PHASE_BOUNDARY_COPY}</p>
 
       <div className="flex items-center gap-3">
@@ -153,6 +185,7 @@ export function TransfersPage() {
         debitAmount={debitAmount}
         onDebitAmountChange={setDebitAmount}
         onFavoriteSelect={handleFavoriteSelect}
+        onConfirm={handleConfirm}
         onModeChange={handleModeChange}
         onRecipientIdentifierChange={setRecipientIdentifier}
         onTargetCurrencyChange={setSelectedTargetBadgeToken}

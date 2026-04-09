@@ -1,6 +1,7 @@
 export { DashboardPage } from './DashboardPage'
 export { CurrencyExchangePage } from './CurrencyExchangePage'
 export { TransfersPage } from './TransfersPage'
+export { TransferReceiptPage } from './TransferReceiptPage'
 export { RatesPage } from './RatesPage'
 export { SettingsPage } from './SettingsPage'
 export { NotFoundPage } from './NotFoundPage'
