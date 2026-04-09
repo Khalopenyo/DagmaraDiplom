@@ -40,4 +40,25 @@ describe('CurrencyExchangePage', () => {
     expect(screen.getByDisplayValue('722')).toBeInTheDocument()
     expect(screen.getByText('1 ЦР = 144.4 ЦИ')).toBeInTheDocument()
   })
+
+  it('allows swapping the currency direction inside the exchange form', async () => {
+    const user = userEvent.setup()
+
+    renderApp(<AppRoutes />, { route: '/rates/exchange/china' })
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Поменять валюты местами: ЦР и ЦЮ',
+      }),
+    )
+
+    expect(screen.getByLabelText('Сумма списания в ЦЮ')).toHaveValue('2234')
+    expect(screen.getByLabelText('Сумма получения в ЦР')).toHaveValue('1000')
+    expect(screen.getByText('1 ЦЮ = 0.448 ЦР')).toBeInTheDocument()
+    expect(
+      screen.getByRole('link', {
+        name: 'Перевести',
+      }),
+    ).toHaveAttribute('href', '/transfers?amount=1000')
+  })
 })

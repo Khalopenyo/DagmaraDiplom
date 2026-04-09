@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router'
 
 import { cbdcRates, formatRateValue } from '../demo'
@@ -6,6 +6,7 @@ import { ExchangeHeroIllustration } from '../features/exchange/ExchangeHeroIllus
 import { CountryFlagBadge } from '../features/rates/flagBadges'
 
 const DEFAULT_DEBIT_AMOUNT = '1000'
+const BASE_CURRENCY_LABEL = 'ЦР'
 
 function sanitizeAmountInput(value: string) {
   const normalizedValue = value.replace(',', '.')
@@ -47,24 +48,51 @@ export function CurrencyExchangePage() {
     (rate) => rate.badgeToken === badgeToken,
   )
   const [debitAmount, setDebitAmount] = useState(DEFAULT_DEBIT_AMOUNT)
+  const [isReverseDirection, setIsReverseDirection] = useState(false)
 
   if (!selectedRate) {
     return <Navigate replace to="/rates" />
   }
 
+  useEffect(() => {
+    setDebitAmount(DEFAULT_DEBIT_AMOUNT)
+    setIsReverseDirection(false)
+  }, [badgeToken])
+
   const parsedDebitAmount = parseAmount(debitAmount)
+  const sourceCurrencyLabel = isReverseDirection
+    ? selectedRate.targetCurrencyLabel
+    : BASE_CURRENCY_LABEL
+  const recipientCurrencyLabel = isReverseDirection
+    ? BASE_CURRENCY_LABEL
+    : selectedRate.targetCurrencyLabel
   const recipientAmount = useMemo(() => {
     if (!Number.isFinite(parsedDebitAmount)) {
       return ''
     }
 
-    return formatExchangeAmount(parsedDebitAmount * selectedRate.rateValue)
-  }, [parsedDebitAmount, selectedRate.rateValue])
-  const rateLabel = `1 ЦР = ${formatRateValue(selectedRate.rateValue)} ${selectedRate.targetCurrencyLabel}`
+    const nextValue = isReverseDirection
+      ? parsedDebitAmount / selectedRate.rateValue
+      : parsedDebitAmount * selectedRate.rateValue
+
+    return formatExchangeAmount(nextValue)
+  }, [isReverseDirection, parsedDebitAmount, selectedRate.rateValue])
+  const rateLabel = isReverseDirection
+    ? `1 ${selectedRate.targetCurrencyLabel} = ${formatRateValue(1 / selectedRate.rateValue)} ${BASE_CURRENCY_LABEL}`
+    : `1 ${BASE_CURRENCY_LABEL} = ${formatRateValue(selectedRate.rateValue)} ${selectedRate.targetCurrencyLabel}`
+  const transferSeedAmount = isReverseDirection ? recipientAmount : debitAmount.trim()
   const transferPath =
-    debitAmount.trim().length > 0
-      ? `/transfers?amount=${encodeURIComponent(debitAmount)}`
+    transferSeedAmount.length > 0
+      ? `/transfers?amount=${encodeURIComponent(transferSeedAmount)}`
       : '/transfers'
+
+  function handleSwapCurrencies() {
+    if (recipientAmount.length > 0) {
+      setDebitAmount(recipientAmount)
+    }
+
+    setIsReverseDirection((value) => !value)
+  }
 
   return (
     <section className="flex w-full flex-col gap-4 pb-4">
@@ -102,9 +130,9 @@ export function CurrencyExchangePage() {
 
       <section className="-mt-2 w-full rounded-[34px] border-[3px] border-[#2F80ED] bg-white px-4 py-4 shadow-[0_24px_64px_rgba(47,128,237,0.12)] sm:-mt-4 sm:px-5 sm:py-5">
         <div className="flex flex-col gap-5 rounded-[28px] bg-white">
-          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-3.5 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
+          <div className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-3.5 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
             <input
-              aria-label="Сумма списания в ЦР"
+              aria-label={`Сумма списания в ${sourceCurrencyLabel}`}
               className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none placeholder:text-[rgba(43,56,92,0.36)]"
               inputMode="decimal"
               onChange={(event) => setDebitAmount(sanitizeAmountInput(event.target.value))}
@@ -115,26 +143,36 @@ export function CurrencyExchangePage() {
               aria-hidden="true"
               className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
             />
-            <span className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)]">
-              ЦР
+            <button
+              aria-label={`Сменить валюту списания. Сейчас ${sourceCurrencyLabel}`}
+              className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)] transition-transform duration-150 hover:scale-[1.02]"
+              onClick={handleSwapCurrencies}
+              type="button"
+            >
+              {sourceCurrencyLabel}
               <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
                 ⌄
               </span>
-            </span>
-          </label>
+            </button>
+          </div>
 
-          <div className="flex items-center justify-center gap-7 text-[44px] leading-none">
+          <button
+            aria-label={`Поменять валюты местами: ${sourceCurrencyLabel} и ${recipientCurrencyLabel}`}
+            className="flex items-center justify-center gap-7 rounded-[18px] py-1 text-[44px] leading-none transition-colors duration-150 hover:bg-[rgba(66,54,198,0.04)]"
+            onClick={handleSwapCurrencies}
+            type="button"
+          >
             <span aria-hidden="true" className="text-[#3E38C7]">
               ↓
             </span>
             <span aria-hidden="true" className="text-[#FF5A72]">
               ↑
             </span>
-          </div>
+          </button>
 
-          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-3.5 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
+          <div className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-3.5 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
             <input
-              aria-label={`Сумма получения в ${selectedRate.targetCurrencyLabel}`}
+              aria-label={`Сумма получения в ${recipientCurrencyLabel}`}
               className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none"
               readOnly
               tabIndex={-1}
@@ -144,13 +182,18 @@ export function CurrencyExchangePage() {
               aria-hidden="true"
               className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
             />
-            <span className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)]">
-              {selectedRate.targetCurrencyLabel}
+            <button
+              aria-label={`Сменить валюту получения. Сейчас ${recipientCurrencyLabel}`}
+              className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)] transition-transform duration-150 hover:scale-[1.02]"
+              onClick={handleSwapCurrencies}
+              type="button"
+            >
+              {recipientCurrencyLabel}
               <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
                 ⌄
               </span>
-            </span>
-          </label>
+            </button>
+          </div>
 
           <div className="flex items-end justify-between gap-4 pt-2">
             <p className="text-sm font-semibold text-[#3E38C7] sm:text-[15px]">
