@@ -1,5 +1,4 @@
 import { cbdcRates } from '../../demo'
-import { ShellCard } from '../../shell/ShellCard'
 import { RateRow } from './RateRow'
 
 const EXPECTED_COUNTRY_ORDER = ['Китай', 'Вьетнам', 'Южная Корея'] as const
@@ -26,23 +25,25 @@ export function RatesBoard() {
   assertRatesContract()
 
   return (
-    <ShellCard className="gap-6 p-6">
-      <div className="flex flex-col gap-2">
-        <h2 className="text-xl font-semibold text-[var(--color-text-strong)]">
-          Обмен валют
-        </h2>
-        <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-          Справочник показывает фиксированные симулированные значения для
-          маршрута Россия → Китай и reference-only строк для дружественных
-          стран.
+    <section className="overflow-hidden rounded-[32px] border border-[rgba(24,38,58,0.08)] bg-[rgba(255,255,255,0.96)] shadow-[0_24px_48px_rgba(24,38,58,0.08)]">
+      <div className="grid grid-cols-[minmax(0,1.7fr)_56px_92px] items-end gap-4 border-b border-[rgba(24,38,58,0.08)] px-6 py-5 text-sm font-semibold text-[var(--color-text-muted)] sm:grid-cols-[minmax(0,1.9fr)_72px_110px] sm:px-8">
+        <p>Страна</p>
+        <p className="text-center">ЦР</p>
+        <p className="text-right">
+          <span className="sr-only">ЦВ страны</span>
+          <span aria-hidden="true">
+            ЦВ
+            <br />
+            страны
+          </span>
         </p>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col">
         {cbdcRates.map((rate) => (
           <RateRow key={rate.country} rate={rate} />
         ))}
       </div>
-    </ShellCard>
+    </section>
   )
 }

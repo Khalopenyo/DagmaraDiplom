@@ -8,53 +8,33 @@ interface RateRowProps {
 export function RateRow({ rate }: RateRowProps) {
   const isPrimary = rate.corridor === 'primary'
   const corridorLabel = isPrimary ? 'Основной маршрут' : 'Справочно'
-  const rowClassName = isPrimary
-    ? 'border-[rgba(15,108,189,0.18)] bg-[rgba(15,108,189,0.08)]'
-    : 'border-[var(--color-border-soft)] bg-[var(--color-surface)]'
-  const corridorBadgeClassName = isPrimary
-    ? 'bg-[rgba(15,108,189,0.12)] text-[var(--color-accent)]'
-    : 'bg-[var(--color-surface-muted)] text-[var(--color-text-muted)]'
 
   return (
     <div
       aria-label={rate.country}
-      className={`grid gap-4 rounded-[20px] border p-5 md:grid-cols-[minmax(0,1.5fr)_minmax(0,0.8fr)_minmax(0,0.8fr)] md:items-center ${rowClassName}`}
+      className="grid grid-cols-[minmax(0,1.7fr)_56px_92px] items-center gap-4 border-b border-[rgba(24,38,58,0.08)] px-6 py-5 last:border-b-0 sm:grid-cols-[minmax(0,1.9fr)_72px_110px] sm:px-8"
       role="group"
     >
-      <div className="flex items-center gap-4">
+      <div className="flex min-w-0 items-center gap-4">
         <CountryFlagBadge badgeToken={rate.badgeToken} primary={isPrimary} />
-        <div className="flex flex-1 flex-col gap-2">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-base font-semibold text-[var(--color-text-strong)]">
-              {rate.country}
-            </p>
-            <span
-              className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${corridorBadgeClassName}`}
-            >
-              {corridorLabel}
-            </span>
-          </div>
-          <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-            Симулированные значения без live-конвертации и без переключения
-            corridor в Phase 2.
+        <div className="min-w-0">
+          <p className="truncate text-[15px] font-semibold text-[var(--color-text-strong)] sm:text-[16px]">
+            {rate.country}
           </p>
+          <span className="sr-only">{corridorLabel}</span>
         </div>
       </div>
 
-      <div className="flex flex-col gap-1">
-        <p className="text-sm font-medium uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
-          База
-        </p>
-        <p className="text-base font-semibold text-[var(--color-text-strong)]">
-          1 ЦР
-        </p>
-      </div>
+      <p className="text-center text-[17px] font-medium text-[var(--color-text-strong)]">
+        1
+      </p>
 
-      <div className="flex flex-col gap-1">
-        <p className="text-sm font-medium uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
-          Курс ЦВ
-        </p>
-        <p className="text-[22px] font-semibold leading-[1.2] text-[var(--color-text-strong)]">
+      <div className="flex items-center justify-end gap-2">
+        <span
+          aria-hidden="true"
+          className={isPrimary ? 'h-2 w-2 rounded-full bg-[#E24B43]' : 'hidden'}
+        />
+        <p className="text-right text-[17px] font-medium text-[var(--color-text-strong)] sm:text-[18px]">
           {formatRateValue(rate.rateValue)}
         </p>
       </div>

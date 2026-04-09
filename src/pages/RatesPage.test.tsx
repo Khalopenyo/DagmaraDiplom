@@ -24,7 +24,10 @@ describe('RatesPage', () => {
   it('shows the repeated base unit and the exact simulated rate values', () => {
     renderApp(<AppRoutes />, { route: '/rates' })
 
-    expect(screen.getAllByText('1 ЦР')).toHaveLength(3)
+    expect(screen.getByText('Страна')).toBeInTheDocument()
+    expect(screen.getByText('ЦР')).toBeInTheDocument()
+    expect(screen.getByText('ЦВ страны')).toBeInTheDocument()
+    expect(screen.getAllByText('1')).toHaveLength(3)
     expect(screen.getByText('2.234')).toBeInTheDocument()
     expect(screen.getByText('1.746')).toBeInTheDocument()
     expect(screen.getByText('5.151')).toBeInTheDocument()

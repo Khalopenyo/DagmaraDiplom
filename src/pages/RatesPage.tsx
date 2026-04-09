@@ -18,18 +18,17 @@ export function RatesPage() {
   const route = getRatesRoute()
 
   return (
-    <section className="flex flex-col gap-8 pb-6">
-      <p className="text-sm font-medium leading-6 text-[var(--color-text-muted)]">
-        {PHASE_BOUNDARY_COPY}
-      </p>
+    <section className="flex flex-col gap-5 pb-6">
+      <p className="sr-only">{PHASE_BOUNDARY_COPY}</p>
 
-      <div className="flex flex-col gap-4">
-        <h1 className="text-[28px] font-semibold leading-[1.2] text-[var(--color-text-strong)]">
+      <div className="flex items-center gap-3">
+        <div
+          aria-hidden="true"
+          className="h-10 w-1 rounded-full bg-[linear-gradient(180deg,#ff6a6a_0%,#ff9f8b_100%)]"
+        />
+        <h1 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-[var(--color-text-strong)]">
           {route.pageTitle}
         </h1>
-        <p className="text-base leading-7 text-[var(--color-text-muted)]">
-          {route.supportingCopy}
-        </p>
       </div>
 
       <RatesBoard />
