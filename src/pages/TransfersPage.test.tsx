@@ -4,10 +4,22 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { AppRoutes } from '../app/AppRoutes'
 import { renderApp } from '../test/renderApp'
+import {
+  buildUserProfile,
+  saveAuthProfile,
+} from '../features/auth/authStorage'
+
+const TEST_DRAFT = {
+  fullName: 'Тестовый Пользователь',
+  login: 'test_user',
+  phone: '+79991234567',
+  password: 'test123',
+}
 
 describe('TransfersPage', () => {
   beforeEach(() => {
     window.sessionStorage.clear()
+    saveAuthProfile(buildUserProfile(TEST_DRAFT))
   })
 
   it('renders the redesigned transfer heading, seeded source account and balance', () => {
@@ -18,7 +30,7 @@ describe('TransfersPage', () => {
         name: 'Трансграничный перевод',
       }),
     ).toBeInTheDocument()
-    expect(screen.getByText('4756 •••• •••• 9018')).toBeInTheDocument()
+    expect(screen.getAllByText('2200 •••• •••• 1810').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Остаток по счету: 3 469.52 ЦР')).toBeInTheDocument()
     expect(
       screen.getByRole('button', {
@@ -186,7 +198,7 @@ describe('TransfersPage', () => {
           { timeout: 3000 },
         ),
       ).toBeInTheDocument()
-      expect(screen.getByText('Дагмара')).toBeInTheDocument()
+      expect(screen.getAllByText('Тестовый Пользователь').length).toBeGreaterThanOrEqual(1)
       expect(screen.getByText('Justin')).toBeInTheDocument()
       expect(screen.getByText('2200 0000 0000 5151')).toBeInTheDocument()
       expect(screen.getByText('100 ₽')).toBeInTheDocument()

@@ -9,8 +9,8 @@ describe('DashboardPage', () => {
   it('renders the seeded account summary and all eight quick actions', () => {
     renderApp(<AppRoutes />, { route: '/dashboard' })
 
-    expect(screen.getByText('Дагмара')).toBeInTheDocument()
-    expect(screen.getByText('4756 •••• •••• 9018')).toBeInTheDocument()
+    expect(screen.getAllByText('Тестовый Пользователь').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('2200 •••• •••• 1810').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('3 469.52 ЦР')).toBeInTheDocument()
 
     const quickActionsRegion = screen.getByRole('region', {

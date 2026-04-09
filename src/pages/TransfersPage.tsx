@@ -7,12 +7,12 @@ import {
   cbdcRates,
   favoriteRecipients,
   transferModes,
-  transferSourceAccounts,
   validateTransferDraft,
   type DemoCountryBadgeToken,
   type DemoFavoriteRecipient,
   type DemoTransferModeId,
 } from '../demo'
+import { useAuth } from '../features/auth'
 import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
 import { getTopLevelRoute } from '../content/topLevelRoutes'
 import { useLiveCbdcRates } from '../features/rates/useLiveCbdcRates'
@@ -86,6 +86,7 @@ export function TransfersPage() {
   getTransfersRoute()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const { user } = useAuth()
   const { rates } = useLiveCbdcRates()
   const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
     transferModes[0].id,
@@ -144,14 +145,8 @@ export function TransfersPage() {
   }
 
   function handleConfirm() {
-    if (!validation.isValid || isProcessing) {
+    if (!validation.isValid || isProcessing || !user) {
       return
-    }
-
-    const sourceAccount = transferSourceAccounts[0]
-
-    if (!sourceAccount) {
-      throw new Error('Transfer source account seed is missing.')
     }
 
     const selectedFavorite = selectedFavoriteId
@@ -160,7 +155,7 @@ export function TransfersPage() {
 
     saveTransferReceipt(
       buildTransferReceipt({
-        senderName: sourceAccount.ownerName,
+        senderName: user.fullName,
         recipientIdentifier,
         selectedFavorite,
         mode: selectedModeId,

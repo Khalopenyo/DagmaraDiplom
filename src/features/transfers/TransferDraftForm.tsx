@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 import {
+  formatAmountWithCurrency,
   transferModes,
-  transferSourceAccounts,
   type DemoCbdcRate,
   type DemoCountryBadgeToken,
   type DemoFavoriteRecipient,
@@ -10,6 +10,7 @@ import {
   type DemoTransferModeId,
   type DemoTransferQuote,
 } from '../../demo'
+import { useAuth } from '../../features/auth'
 import { CountryFlagBadge } from '../rates/flagBadges'
 import { FavoriteRecipientsStrip } from './FavoriteRecipientsStrip'
 import { TransferTypeSelector } from './TransferTypeSelector'
@@ -35,7 +36,7 @@ interface TransferDraftFormProps {
   validation?: DemoTransferDraftValidationResult
 }
 
-const SOURCE_ACCOUNT = transferSourceAccounts[0]
+
 
 function ValidationHint({ message }: { message: string }) {
   return (
@@ -84,15 +85,18 @@ export function TransferDraftForm({
   selectedTargetRate,
   validation,
 }: TransferDraftFormProps) {
+  const { user } = useAuth()
   const selectedMode =
     transferModes.find((mode) => mode.id === selectedModeId) ?? transferModes[0]
   const identifierError = validation?.identifierError ?? null
   const amountError = validation?.amountError ?? null
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false)
 
-  if (!SOURCE_ACCOUNT) {
-    throw new Error('Transfer source account seed is missing.')
+  if (!user) {
+    return null
   }
+
+  const balanceLabel = formatAmountWithCurrency(user.balanceAmount, user.currencyLabel)
 
   return (
     <section className="relative rounded-[32px] border border-[rgba(24,38,58,0.08)] bg-white px-5 py-6 shadow-[0_24px_48px_rgba(24,38,58,0.08)] sm:px-6 sm:py-7">
@@ -121,14 +125,14 @@ export function TransferDraftForm({
             aria-label="Счет списания"
             className="flex items-center justify-between rounded-[18px] border border-[rgba(24,38,58,0.12)] bg-white px-4 py-3 text-[22px] font-medium tracking-[0.02em] text-[var(--color-text-strong)] shadow-[0_12px_24px_rgba(24,38,58,0.04)]"
           >
-            <span>{SOURCE_ACCOUNT.maskedAccountNumber}</span>
+            <span>{user.maskedCardNumber}</span>
             <span aria-hidden="true" className="text-[18px] text-[rgba(73,78,101,0.5)]">
               ⌄
             </span>
           </div>
 
           <p className="text-sm font-semibold leading-6 text-[#3E38C7]">
-            Остаток по счету: {SOURCE_ACCOUNT.availableBalanceLabel}
+            Остаток по счету: {balanceLabel}
           </p>
         </div>
 

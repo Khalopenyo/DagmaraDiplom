@@ -1,3 +1,4 @@
+export { AuthPage } from './AuthPage'
 export { DashboardPage } from './DashboardPage'
 export { CurrencyExchangePage } from './CurrencyExchangePage'
 export { TransfersPage } from './TransfersPage'

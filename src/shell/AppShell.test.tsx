@@ -23,7 +23,7 @@ describe('AppShell', () => {
     expect(
       within(navigation).getByRole('link', { name: 'Настройки' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Здравствуйте, Дагмара')).toBeInTheDocument()
+    expect(screen.getByText('Здравствуйте, Тестовый Пользователь')).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Поиск по demo')).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: 'Уведомления' }),
@@ -97,7 +97,7 @@ describe('AppShell', () => {
 
     expect(settingsContent.className).toContain('max-w-[760px]')
     expect(screen.getByText('Simulated demo')).toBeInTheDocument()
-    expect(screen.getByText('Здравствуйте, Дагмара')).toBeInTheDocument()
+    expect(screen.getByText('Здравствуйте, Тестовый Пользователь')).toBeInTheDocument()
   })
 
   it('keeps nested exchange routes in the full-width content mode', () => {

@@ -1,24 +1,21 @@
 import { Link } from 'react-router'
 
-import { accountSummary, formatAmountWithCurrency } from '../../demo'
+import { formatAmountWithCurrency } from '../../demo'
+import { useAuth } from '../../features/auth'
+
 const TRANSFER_CTA_LABEL = 'Перейти к переводу'
-const EXPECTED_OWNER_NAME = 'Дагмара'
-const EXPECTED_ACCOUNT_NUMBER = '4756 •••• •••• 9018'
-const EXPECTED_BALANCE_LABEL = '3 469.52 ЦР'
 
 export function AccountSummaryCard() {
-  const balanceLabel = formatAmountWithCurrency(
-    accountSummary.balanceAmount,
-    accountSummary.currencyLabel,
-  )
+  const { user } = useAuth()
 
-  if (
-    accountSummary.ownerName !== EXPECTED_OWNER_NAME ||
-    accountSummary.maskedAccountNumber !== EXPECTED_ACCOUNT_NUMBER ||
-    balanceLabel !== EXPECTED_BALANCE_LABEL
-  ) {
-    throw new Error('Dashboard account summary seed drifted from the Phase 2 contract.')
+  if (!user) {
+    return null
   }
+
+  const balanceLabel = formatAmountWithCurrency(
+    user.balanceAmount,
+    user.currencyLabel,
+  )
 
   return (
     <section className="relative px-3 pb-6 pt-1 sm:px-4">
@@ -51,10 +48,10 @@ export function AccountSummaryCard() {
         <div className="relative flex flex-col gap-7">
           <div className="flex flex-col gap-3">
             <h2 className="text-[30px] font-semibold leading-[1.1] tracking-[-0.04em]">
-              {accountSummary.ownerName}
+              {user.fullName}
             </h2>
             <p className="text-lg tracking-[0.02em] text-white/84">
-              {accountSummary.maskedAccountNumber}
+              {user.maskedCardNumber}
             </p>
           </div>
 
