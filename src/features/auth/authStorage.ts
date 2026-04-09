@@ -5,11 +5,21 @@ export interface DemoAuthDraft {
   password: string
 }
 
+export interface DemoStoredUser extends DemoAuthDraft {
+  balanceAmount: number
+}
+
 export interface DemoAuthValidationResult {
   isValid: boolean
   fullNameError: string | null
   loginError: string | null
   phoneError: string | null
+  passwordError: string | null
+}
+
+export interface DemoLoginValidationResult {
+  isValid: boolean
+  loginError: string | null
   passwordError: string | null
 }
 
@@ -24,6 +34,7 @@ export interface DemoUserProfile {
 }
 
 export const AUTH_PROFILE_STORAGE_KEY = 'dagmara.auth-profile'
+export const REGISTERED_USERS_STORAGE_KEY = 'dagmara.registered-users'
 export const DEFAULT_PROFILE_BALANCE = 3469.52
 
 function normalizeWhitespace(value: string) {
@@ -160,23 +171,48 @@ export function validateAuthDraft(draft: DemoAuthDraft): DemoAuthValidationResul
   }
 }
 
-export function buildUserProfile(draft: DemoAuthDraft): DemoUserProfile {
-  const normalizedFullName = normalizeWhitespace(draft.fullName)
-  const normalizedPhone = normalizeRussianPhone(draft.phone)
+export function validateLoginDraft(
+  draft: Pick<DemoAuthDraft, 'login' | 'password'>,
+): DemoLoginValidationResult {
+  const normalizedLogin = draft.login.trim()
+  const normalizedPassword = draft.password.trim()
+
+  const loginError =
+    normalizedLogin.length === 0
+      ? 'Укажите логин.'
+      : !/^[a-zA-Z0-9_.-]{3,20}$/.test(normalizedLogin)
+        ? 'Логин имеет неверный формат.'
+        : null
+
+  const passwordError =
+    normalizedPassword.length === 0
+      ? 'Укажите пароль.'
+      : null
+
+  return {
+    isValid: loginError === null && passwordError === null,
+    loginError,
+    passwordError,
+  }
+}
+
+export function buildUserProfile(user: DemoStoredUser): DemoUserProfile {
+  const normalizedFullName = normalizeWhitespace(user.fullName)
+  const normalizedPhone = normalizeRussianPhone(user.phone)
 
   if (normalizedPhone === null) {
     throw new Error('Cannot build user profile from an invalid Russian phone number.')
   }
 
-  const cardNumber = generateCardNumber(draft)
+  const cardNumber = generateCardNumber(user)
 
   return {
     fullName: normalizedFullName,
-    login: draft.login.trim(),
+    login: user.login.trim(),
     phone: formatRussianPhone(normalizedPhone),
     cardNumber: formatCardNumber(cardNumber),
     maskedCardNumber: maskCardNumber(cardNumber),
-    balanceAmount: DEFAULT_PROFILE_BALANCE,
+    balanceAmount: user.balanceAmount,
     currencyLabel: 'ЦР',
   }
 }
@@ -201,4 +237,66 @@ export function loadAuthProfile() {
 
 export function clearAuthProfile() {
   window.sessionStorage.removeItem(AUTH_PROFILE_STORAGE_KEY)
+}
+
+export function loadRegisteredUsers(): DemoStoredUser[] {
+  const rawValue = window.localStorage.getItem(REGISTERED_USERS_STORAGE_KEY)
+
+  if (!rawValue) {
+    return []
+  }
+
+  try {
+    return JSON.parse(rawValue) as DemoStoredUser[]
+  } catch {
+    return []
+  }
+}
+
+export function saveRegisteredUser(draft: DemoAuthDraft, initialBalance?: number): DemoStoredUser {
+  const users = loadRegisteredUsers()
+  
+  const existingIndex = users.findIndex(
+    (u) => u.login.toLowerCase() === draft.login.trim().toLowerCase(),
+  )
+
+  const balanceToSet = initialBalance !== undefined ? initialBalance : 0
+  const storedUser: DemoStoredUser = { ...draft, balanceAmount: balanceToSet }
+
+  if (existingIndex >= 0) {
+    if (initialBalance === undefined) {
+      storedUser.balanceAmount = users[existingIndex].balanceAmount
+    }
+    users[existingIndex] = storedUser
+  } else {
+    users.push(storedUser)
+  }
+
+  window.localStorage.setItem(REGISTERED_USERS_STORAGE_KEY, JSON.stringify(users))
+  return storedUser
+}
+
+export function findRegisteredUser(loginInput: string): DemoStoredUser | null {
+  const users = loadRegisteredUsers()
+  const match = users.find(
+    (u) => u.login.toLowerCase() === loginInput.trim().toLowerCase(),
+  )
+
+  return match ?? null
+}
+
+export function topUpStoredUser(loginInput: string, amount: number): DemoStoredUser | null {
+  const users = loadRegisteredUsers()
+  const user = users.find(
+    (u) => u.login.toLowerCase() === loginInput.trim().toLowerCase(),
+  )
+
+  if (!user) {
+    return null
+  }
+
+  user.balanceAmount += amount
+  window.localStorage.setItem(REGISTERED_USERS_STORAGE_KEY, JSON.stringify(users))
+  
+  return user
 }

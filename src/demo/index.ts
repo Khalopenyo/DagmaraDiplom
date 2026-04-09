@@ -6,6 +6,7 @@ export {
 } from './favoriteRecipients'
 export {
   formatAmountWithCurrency,
+  formatDecimalValue,
   formatRateValue,
   SEEDED_BALANCE_DISPLAY,
 } from './formatters'

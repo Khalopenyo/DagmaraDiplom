@@ -11,9 +11,10 @@ import {
 
 const TEST_DRAFT = {
   fullName: 'Тестовый Пользователь',
-  login: 'test_user',
-  phone: '+79991234567',
-  password: 'test123',
+  login: 'tester',
+  phone: '79990000000',
+  password: 'password123',
+  balanceAmount: 3469.52,
 }
 
 describe('TransfersPage', () => {
@@ -31,7 +32,7 @@ describe('TransfersPage', () => {
       }),
     ).toBeInTheDocument()
     expect(screen.getAllByText('2200 •••• •••• 1810').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('Остаток по счету: 3 469.52 ЦР')).toBeInTheDocument()
+    expect(screen.getByText('Остаток по счету: 3 469.52 ₽')).toBeInTheDocument()
     expect(
       screen.getByRole('button', {
         name: 'Открыть список валют получения. Сейчас Китай ЦЮ',

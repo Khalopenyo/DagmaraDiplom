@@ -13,15 +13,17 @@ import {
   clearAuthProfile,
   loadAuthProfile,
   saveAuthProfile,
-  type DemoAuthDraft,
+  topUpStoredUser,
+  type DemoStoredUser,
   type DemoUserProfile,
 } from './authStorage'
 
 interface AuthContextValue {
   user: DemoUserProfile | null
   isAuthenticated: boolean
-  signIn: (draft: DemoAuthDraft) => DemoUserProfile
+  signIn: (storedUser: DemoStoredUser) => DemoUserProfile
   signOut: () => void
+  topUpBalance: (amount: number) => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -29,8 +31,8 @@ const AuthContext = createContext<AuthContextValue | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<DemoUserProfile | null>(() => loadAuthProfile())
 
-  const signIn = useCallback((draft: DemoAuthDraft) => {
-    const profile = buildUserProfile(draft)
+  const signIn = useCallback((storedUser: DemoStoredUser) => {
+    const profile = buildUserProfile(storedUser)
 
     saveAuthProfile(profile)
     setUser(profile)
@@ -44,14 +46,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }, [])
 
+  const topUpBalance = useCallback((amount: number) => {
+    setUser((prevUser) => {
+      if (!prevUser) return prevUser
+
+      const updatedStoredUser = topUpStoredUser(prevUser.login, amount)
+      if (!updatedStoredUser) return prevUser
+
+      const updatedProfile = buildUserProfile(updatedStoredUser)
+      saveAuthProfile(updatedProfile)
+      return updatedProfile
+    })
+  }, [])
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
       isAuthenticated: user !== null,
       signIn,
       signOut,
+      topUpBalance,
     }),
-    [signIn, signOut, user],
+    [signIn, signOut, topUpBalance, user],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -23,8 +23,8 @@ describe('AppShell', () => {
     expect(
       within(navigation).getByRole('link', { name: 'Настройки' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('Здравствуйте, Тестовый Пользователь')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('Поиск по demo')).toBeInTheDocument()
+    expect(screen.getByText('Здравствуйте, Пользователь')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Поиск')).toBeInTheDocument()
     expect(
       screen.getByRole('button', { name: 'Уведомления' }),
     ).toBeInTheDocument()
@@ -41,7 +41,7 @@ describe('AppShell', () => {
 
     renderApp(<AppRoutes />, { route: '/dashboard' })
 
-    const searchInput = screen.getByPlaceholderText('Поиск по demo')
+    const searchInput = screen.getByPlaceholderText('Поиск')
     const navigation = screen.getByRole('navigation')
 
     await user.type(searchInput, 'demo')
@@ -97,7 +97,7 @@ describe('AppShell', () => {
 
     expect(settingsContent.className).toContain('max-w-[760px]')
     expect(screen.getByText('Simulated demo')).toBeInTheDocument()
-    expect(screen.getByText('Здравствуйте, Тестовый Пользователь')).toBeInTheDocument()
+    expect(screen.getByText('Здравствуйте, Пользователь')).toBeInTheDocument()
   })
 
   it('keeps nested exchange routes in the full-width content mode', () => {
@@ -109,5 +109,31 @@ describe('AppShell', () => {
         name: 'Обмен',
       }),
     ).toBeInTheDocument()
+  })
+
+  it('navigates to routes from the global search menu command palette', async () => {
+    const user = userEvent.setup()
+    renderApp(<AppRoutes />, { route: '/dashboard' })
+
+    const searchInput = screen.getByPlaceholderText('Поиск')
+
+    await user.type(searchInput, 'перев')
+
+    // Find the menu item for transfers
+    const transferResult = screen.getByText('Трансграничные переводы в ЦВЦБ')
+    expect(transferResult).toBeInTheDocument()
+
+    // Click it
+    await user.click(transferResult)
+
+    // Should navigate to transfers
+    expect(
+      screen.getByRole('heading', {
+        name: 'Трансграничный перевод',
+      }),
+    ).toBeInTheDocument()
+
+    // Search input should be cleared
+    expect(searchInput).toHaveValue('')
   })
 })

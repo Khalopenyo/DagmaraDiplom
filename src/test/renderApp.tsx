@@ -6,6 +6,7 @@ import { AuthProvider } from '../features/auth'
 import {
   buildUserProfile,
   saveAuthProfile,
+  saveRegisteredUser,
   type DemoAuthDraft,
 } from '../features/auth/authStorage'
 
@@ -25,7 +26,8 @@ export function renderApp(ui: ReactElement, options: RenderAppOptions = {}) {
   const { route = '/dashboard', authenticated = true } = options
 
   if (authenticated) {
-    const profile = buildUserProfile(DEFAULT_TEST_DRAFT)
+    const storedUser = saveRegisteredUser(DEFAULT_TEST_DRAFT, 3469.52)
+    const profile = buildUserProfile(storedUser)
 
     saveAuthProfile(profile)
   }

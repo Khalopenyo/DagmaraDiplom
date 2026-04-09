@@ -1,4 +1,4 @@
-export const SEEDED_BALANCE_DISPLAY = '3 469.52 ЦР'
+export const SEEDED_BALANCE_DISPLAY = '3 469.52 ₽'
 
 function addThousandsSeparators(value: string) {
   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
@@ -16,7 +16,8 @@ export function formatDecimalValue(value: number, fractionDigits: number) {
 }
 
 export function formatAmountWithCurrency(value: number, currencyLabel: string) {
-  return `${formatDecimalValue(value, 2)} ${currencyLabel}`
+  const displayLabel = currencyLabel === 'ЦР' ? '₽' : currencyLabel
+  return `${formatDecimalValue(value, 2)} ${displayLabel}`
 }
 
 export function formatRateValue(value: number) {

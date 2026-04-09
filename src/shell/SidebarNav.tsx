@@ -32,7 +32,7 @@ export function SidebarNav() {
     <aside className="flex w-[264px] shrink-0 flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-surface)] p-6">
       <div className="mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
-          ФинМост 
+          Digital Sky 
         </p>
         {user ? (
           <>

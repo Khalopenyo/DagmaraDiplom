@@ -11,7 +11,7 @@ describe('DashboardPage', () => {
 
     expect(screen.getAllByText('Тестовый Пользователь').length).toBeGreaterThanOrEqual(1)
     expect(screen.getAllByText('2200 •••• •••• 1810').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByText('3 469.52 ЦР')).toBeInTheDocument()
+    expect(screen.getByText('3 469.52 ₽')).toBeInTheDocument()
 
     const quickActionsRegion = screen.getByRole('region', {
       name: 'Быстрые действия',
@@ -111,5 +111,27 @@ describe('DashboardPage', () => {
         name: 'Трансграничный перевод',
       }),
     ).toBeInTheDocument()
+  })
+
+  it('tops up the balance when using the Пополнить button', async () => {
+    const user = userEvent.setup()
+    renderApp(<AppRoutes />, { route: '/dashboard' })
+
+    await user.click(screen.getByRole('button', { name: 'Пополнить' }))
+
+    const input = screen.getByLabelText('Сумма пополнения')
+    const confirmButton = screen.getByRole('button', { name: 'Подтвердить' })
+
+    expect(screen.getByRole('heading', { name: 'Пополнение баланса' })).toBeInTheDocument()
+
+    // Clear the default "1000" and type "1500"
+    await user.clear(input)
+    await user.type(input, '1500')
+
+    await user.click(confirmButton)
+
+    // The modal should close and the balance should update: 3469.52 + 1500 = 4969.52
+    expect(screen.queryByRole('heading', { name: 'Пополнение баланса' })).not.toBeInTheDocument()
+    expect(screen.getByText('4 969.52 ₽')).toBeInTheDocument()
   })
 })
