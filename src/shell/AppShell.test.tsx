@@ -58,13 +58,14 @@ describe('AppShell', () => {
     expect(searchInput).toHaveValue('demo')
   })
 
-  it('keeps the shell container while letting dashboard and rates expand to full width', async () => {
+  it('keeps the shell container while letting dashboard, transfers and rates expand to full width', async () => {
     const user = userEvent.setup()
 
     renderApp(<AppRoutes />, { route: '/dashboard' })
 
     const pageContainer = screen.getByTestId('page-container')
     const dashboardContent = screen.getByTestId('page-content')
+    const navigation = screen.getByRole('navigation')
 
     expect(pageContainer.className).toContain('max-w-[1200px]')
     expect(pageContainer.className).toContain('px-8')
@@ -72,13 +73,25 @@ describe('AppShell', () => {
     expect(pageContainer.className).toContain('pb-12')
     expect(dashboardContent.className).toContain('max-w-none')
 
-    await user.click(screen.getByRole('link', { name: 'Обмен валют' }))
+    await user.click(
+      within(navigation).getByRole('link', { name: 'Переводы' }),
+    )
+
+    const transfersContent = screen.getByTestId('page-content')
+
+    expect(transfersContent.className).toContain('max-w-none')
+
+    await user.click(
+      within(navigation).getByRole('link', { name: 'Обмен валют' }),
+    )
 
     const ratesContent = screen.getByTestId('page-content')
 
     expect(ratesContent.className).toContain('max-w-none')
 
-    await user.click(screen.getByRole('link', { name: 'Настройки' }))
+    await user.click(
+      within(navigation).getByRole('link', { name: 'Настройки' }),
+    )
 
     const settingsContent = screen.getByTestId('page-content')
 

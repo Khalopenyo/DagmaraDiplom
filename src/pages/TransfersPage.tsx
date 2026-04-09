@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router'
 
 import {
@@ -96,9 +96,11 @@ export function TransfersPage() {
     DemoFavoriteRecipient['id'] | null
   >(null)
   const [recipientIdentifier, setRecipientIdentifier] = useState('')
+  const [isProcessing, setIsProcessing] = useState(false)
   const [debitAmount, setDebitAmount] = useState(() =>
     getSeededDebitAmount(searchParams),
   )
+  const processingTimeoutId = useRef<number | null>(null)
   const selectedTargetRate = rates.find(
     (rate) => rate.badgeToken === selectedTargetBadgeToken,
   ) ?? rates.find(
@@ -120,6 +122,14 @@ export function TransfersPage() {
     setSelectedTargetBadgeToken(getSeededTargetBadgeToken(searchParams))
   }, [searchParams])
 
+  useEffect(() => {
+    return () => {
+      if (processingTimeoutId.current !== null) {
+        window.clearTimeout(processingTimeoutId.current)
+      }
+    }
+  }, [])
+
   function handleModeChange(nextModeId: DemoTransferModeId) {
     setSelectedModeId(nextModeId)
 
@@ -134,7 +144,7 @@ export function TransfersPage() {
   }
 
   function handleConfirm() {
-    if (!validation.isValid) {
+    if (!validation.isValid || isProcessing) {
       return
     }
 
@@ -158,7 +168,10 @@ export function TransfersPage() {
       }),
     )
 
-    void navigate('/transfers/receipt')
+    setIsProcessing(true)
+    processingTimeoutId.current = window.setTimeout(() => {
+      void navigate('/transfers/receipt')
+    }, 2000)
   }
 
   return (
@@ -183,6 +196,7 @@ export function TransfersPage() {
         availableCurrencies={rates}
         canConfirm={validation.isValid}
         debitAmount={debitAmount}
+        isProcessing={isProcessing}
         onDebitAmountChange={setDebitAmount}
         onFavoriteSelect={handleFavoriteSelect}
         onConfirm={handleConfirm}

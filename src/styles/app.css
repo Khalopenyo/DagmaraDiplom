@@ -2,7 +2,7 @@
 @import "@fontsource-variable/manrope/wght.css";
 
 :root {
-  --color-bg: #f5f1e8;
+  --color-bg: #ffffff;
   --color-surface: #ffffff;
   --color-surface-muted: #eef3f7;
   --color-text-strong: #18263a;
@@ -15,10 +15,7 @@
   --shadow-card: 0 16px 40px rgba(24, 38, 58, 0.08);
   font-family: "Manrope Variable", sans-serif;
   color: var(--color-text-strong);
-  background:
-    radial-gradient(circle at top left, rgba(15, 108, 189, 0.12), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(24, 38, 58, 0.08), transparent 22%),
-    var(--color-bg);
+  background: var(--color-bg);
 }
 
 * {

@@ -19,6 +19,7 @@ interface TransferDraftFormProps {
   canConfirm: boolean
   debitAmount: string
   identifierError?: string | null
+  isProcessing?: boolean
   amountError?: string | null
   onDebitAmountChange: (value: string) => void
   onFavoriteSelect: (favoriteId: DemoFavoriteRecipient['id']) => void
@@ -69,6 +70,7 @@ export function TransferDraftForm({
   availableCurrencies,
   canConfirm,
   debitAmount,
+  isProcessing = false,
   onDebitAmountChange,
   onFavoriteSelect,
   onConfirm,
@@ -93,7 +95,26 @@ export function TransferDraftForm({
   }
 
   return (
-    <section className="rounded-[32px] border border-[rgba(24,38,58,0.08)] bg-white px-5 py-6 shadow-[0_24px_48px_rgba(24,38,58,0.08)] sm:px-6 sm:py-7">
+    <section className="relative rounded-[32px] border border-[rgba(24,38,58,0.08)] bg-white px-5 py-6 shadow-[0_24px_48px_rgba(24,38,58,0.08)] sm:px-6 sm:py-7">
+      {isProcessing ? (
+        <div className="absolute inset-0 z-40 flex items-center justify-center rounded-[32px] bg-[rgba(255,255,255,0.9)] backdrop-blur-[2px]">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <span
+              aria-hidden="true"
+              className="inline-flex h-14 w-14 animate-spin rounded-full border-[4px] border-[rgba(62,56,199,0.14)] border-t-[#3E38C7]"
+            />
+            <div className="space-y-1">
+              <p className="text-lg font-semibold text-[var(--color-text-strong)]">
+                Выполняем перевод
+              </p>
+              <p className="text-sm text-[rgba(73,78,101,0.74)]">
+                Подготавливаем электронный чек
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-3">
           <div
@@ -280,7 +301,7 @@ export function TransferDraftForm({
           onClick={onConfirm}
           type="button"
         >
-          Подтвердить
+          {isProcessing ? 'Обработка...' : 'Подтвердить'}
         </button>
       </div>
     </section>

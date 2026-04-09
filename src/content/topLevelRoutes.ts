@@ -27,7 +27,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
       'Соберите черновик перевода для corridor Россия → Китай: выберите способ отправки, получателя и сумму списания, чтобы увидеть прозрачный simulated quote.',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'intro-card',
-    contentWidth: 'narrow',
+    contentWidth: 'full',
   },
   {
     path: '/rates',
@@ -44,7 +44,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
     navLabel: 'Настройки',
     pageTitle: 'Настройки',
     supportingCopy:
-      'Раздел зарезервирован под границы demo и перезапуск сценария. В Phase 1 оставляйте его описательным.',
+      'Скоро',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'inline-helper',
     contentWidth: 'narrow',

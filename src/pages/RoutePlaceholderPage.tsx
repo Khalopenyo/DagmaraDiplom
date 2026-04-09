@@ -65,7 +65,7 @@ export function RoutePlaceholderPage({ route }: RoutePlaceholderPageProps) {
       <ShellCard>
         {!usesIntroCard ? (
           <p className="text-sm font-medium leading-6 text-[var(--color-text-muted)]">
-            Рамка экрана сохранена для следующих фаз, без живых данных и без серверного поведения.
+            
           </p>
         ) : null}
         <h2 className="text-xl font-semibold text-[var(--color-text-strong)]">

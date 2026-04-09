@@ -142,44 +142,60 @@ describe('TransfersPage', () => {
     expect(screen.getByLabelText('Сумма получения в ЦИ')).toHaveValue('36 100.00')
   })
 
-  it('keeps confirm disabled for invalid drafts and opens a dynamic receipt for a valid one', async () => {
-    const user = userEvent.setup()
+  it(
+    'shows a short processing state before opening a dynamic receipt',
+    async () => {
+      const user = userEvent.setup()
 
-    renderApp(<AppRoutes />, { route: '/transfers' })
+      renderApp(<AppRoutes />, { route: '/transfers' })
 
-    const confirmButton = screen.getByRole('button', { name: 'Подтвердить' })
-    const amountInput = screen.getByLabelText('Сумма списания')
+      const confirmButton = screen.getByRole('button', { name: 'Подтвердить' })
+      const amountInput = screen.getByLabelText('Сумма списания')
 
-    expect(confirmButton).toBeDisabled()
+      expect(confirmButton).toBeDisabled()
 
-    await user.type(amountInput, '3469.53')
-    expect(confirmButton).toBeDisabled()
+      await user.type(amountInput, '3469.53')
+      expect(confirmButton).toBeDisabled()
 
-    await user.clear(amountInput)
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Justin',
-      }),
-    )
-    await user.type(amountInput, '100')
+      await user.clear(amountInput)
+      await user.click(
+        screen.getByRole('button', {
+          name: 'Justin',
+        }),
+      )
+      await user.type(amountInput, '100')
 
-    expect(confirmButton).toBeEnabled()
+      expect(confirmButton).toBeEnabled()
 
-    await user.click(confirmButton)
+      await user.click(confirmButton)
 
-    expect(
-      screen.getByRole('heading', {
-        name: 'Электронный чек',
-      }),
-    ).toBeInTheDocument()
-    expect(screen.getByText('Дагмара')).toBeInTheDocument()
-    expect(screen.getByText('Justin')).toBeInTheDocument()
-    expect(screen.getByText('2200 0000 0000 5151')).toBeInTheDocument()
-    expect(screen.getByText('100 ₽')).toBeInTheDocument()
-    expect(screen.getByText('10 ₽')).toBeInTheDocument()
-    expect(screen.getByText('110 ₽')).toBeInTheDocument()
-    expect(
-      screen.getByText(/^#\d{7}$/),
-    ).toBeInTheDocument()
-  })
+      expect(screen.getByText('Выполняем перевод')).toBeInTheDocument()
+      expect(screen.getByText('Подготавливаем электронный чек')).toBeInTheDocument()
+      expect(
+        screen.queryByRole('heading', {
+          name: 'Электронный чек',
+        }),
+      ).not.toBeInTheDocument()
+
+      expect(
+        await screen.findByRole(
+          'heading',
+          {
+            name: 'Электронный чек',
+          },
+          { timeout: 3000 },
+        ),
+      ).toBeInTheDocument()
+      expect(screen.getByText('Дагмара')).toBeInTheDocument()
+      expect(screen.getByText('Justin')).toBeInTheDocument()
+      expect(screen.getByText('2200 0000 0000 5151')).toBeInTheDocument()
+      expect(screen.getByText('100 ₽')).toBeInTheDocument()
+      expect(screen.getByText('10 ₽')).toBeInTheDocument()
+      expect(screen.getByText('110 ₽')).toBeInTheDocument()
+      expect(
+        screen.getByText(/^#\d{7}$/),
+      ).toBeInTheDocument()
+    },
+    8000,
+  )
 })

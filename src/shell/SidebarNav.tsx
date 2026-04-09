@@ -29,13 +29,13 @@ export function SidebarNav() {
     <aside className="flex w-[264px] shrink-0 flex-col border-r border-[var(--color-border-soft)] bg-[var(--color-surface)] p-6">
       <div className="mb-10">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-accent)]">
-          Dagmara
+          ФинМост 
         </p>
         <p className="mt-3 text-lg font-semibold text-[var(--color-text-strong)]">
-          CBDC demo desktop
+          
         </p>
         <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
-          Phase 1 shell for the scripted Russia to China corridor.
+         
         </p>
       </div>
 

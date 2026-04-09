@@ -1,12 +1,12 @@
-export const SHELL_BADGE_LABEL = 'Simulated demo'
+export const SHELL_BADGE_LABEL = ''
 
 export const PHASE_BOUNDARY_COPY =
-  'Клиентская симуляция с фиктивными данными. Реального движения денег и официальных интеграций с центральными банками нет.'
+  ''
 
-export const EMPTY_STATE_HEADING = 'Раздел готовится'
+export const EMPTY_STATE_HEADING = ''
 
 export const EMPTY_STATE_BODY =
-  'Этот экран уже подключен к demo-shell, но содержимое появится в следующих фазах. Вернитесь на «Главную» или откройте «Переводы», чтобы продолжить сценарий.'
+  ''
 
 export const NOT_FOUND_COPY =
-  'Не удалось отобразить демо-экран. Вернитесь на «Главную» или обновите страницу — реальные данные не затронуты.'
+  ''
