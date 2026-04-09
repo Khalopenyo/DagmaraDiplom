@@ -22,7 +22,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
     navLabel: 'Переводы',
     pageTitle: 'Переводы',
     supportingCopy:
-      'На этом маршруте в следующих фазах появится сценарий отправки. В Phase 1 показывайте только рамку экрана и пояснение.',
+      'Соберите черновик перевода для corridor Россия → Китай: выберите способ отправки, получателя и сумму списания, чтобы увидеть прозрачный simulated quote.',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'intro-card',
   },

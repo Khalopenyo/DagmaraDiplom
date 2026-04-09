@@ -1,6 +1,15 @@
-import { getTopLevelRoute } from '../content/topLevelRoutes'
+import { useState } from 'react'
 
-import { RoutePlaceholderPage } from './RoutePlaceholderPage'
+import {
+  favoriteRecipients,
+  transferModes,
+  type DemoFavoriteRecipient,
+  type DemoTransferModeId,
+} from '../demo'
+import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
+import { getTopLevelRoute } from '../content/topLevelRoutes'
+import { TransferDraftForm } from '../features/transfers/TransferDraftForm'
+import { ShellCard } from '../shell/ShellCard'
 
 const TRANSFERS_TITLE = 'Переводы'
 
@@ -14,6 +23,86 @@ function getTransfersRoute() {
   return route
 }
 
+function getFavoriteIdentifier(
+  favoriteId: DemoFavoriteRecipient['id'],
+  modeId: DemoTransferModeId,
+) {
+  const favorite = favoriteRecipients.find((candidate) => candidate.id === favoriteId)
+
+  if (!favorite) {
+    return ''
+  }
+
+  return modeId === 'card' ? favorite.cardValue : favorite.phoneValue
+}
+
 export function TransfersPage() {
-  return <RoutePlaceholderPage route={getTransfersRoute()} />
+  const route = getTransfersRoute()
+  const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
+    transferModes[0].id,
+  )
+  const [selectedFavoriteId, setSelectedFavoriteId] = useState<
+    DemoFavoriteRecipient['id'] | null
+  >(null)
+  const [recipientIdentifier, setRecipientIdentifier] = useState('')
+  const [debitAmount, setDebitAmount] = useState('')
+
+  function handleModeChange(nextModeId: DemoTransferModeId) {
+    setSelectedModeId(nextModeId)
+
+    if (selectedFavoriteId) {
+      setRecipientIdentifier(getFavoriteIdentifier(selectedFavoriteId, nextModeId))
+    }
+  }
+
+  function handleFavoriteSelect(favoriteId: DemoFavoriteRecipient['id']) {
+    setSelectedFavoriteId(favoriteId)
+    setRecipientIdentifier(getFavoriteIdentifier(favoriteId, selectedModeId))
+  }
+
+  return (
+    <section className="flex flex-col gap-8 pb-6">
+      <ShellCard className="border-[rgba(15,108,189,0.18)] bg-[rgba(15,108,189,0.08)] p-8 shadow-[var(--shadow-card)]">
+        <p className="text-sm font-semibold leading-6 text-[var(--color-accent)]">
+          {PHASE_BOUNDARY_COPY}
+        </p>
+      </ShellCard>
+
+      <div className="flex flex-col gap-4">
+        <h1 className="text-[28px] font-semibold leading-[1.2] text-[var(--color-text-strong)]">
+          {route.pageTitle}
+        </h1>
+        <p className="text-base leading-7 text-[var(--color-text-muted)]">
+          {route.supportingCopy}
+        </p>
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.9fr)]">
+        <TransferDraftForm
+          debitAmount={debitAmount}
+          onDebitAmountChange={setDebitAmount}
+          onFavoriteSelect={handleFavoriteSelect}
+          onModeChange={handleModeChange}
+          onRecipientIdentifierChange={setRecipientIdentifier}
+          recipientIdentifier={recipientIdentifier}
+          selectedFavoriteId={selectedFavoriteId}
+          selectedModeId={selectedModeId}
+        />
+
+        <ShellCard className="gap-4 border-[var(--color-border-soft)] bg-[color-mix(in_srgb,var(--color-surface)_94%,rgba(15,108,189,0.05))] p-8 shadow-[var(--shadow-card)]">
+          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
+            Следующий шаг
+          </p>
+          <h2 className="text-xl font-semibold text-[var(--color-text-strong)]">
+            Quote появится справа в этой же рабочей области
+          </h2>
+          <p className="text-sm leading-6 text-[var(--color-text-muted)]">
+            В этой фазе пользователь уже заполняет реальный draft. Следом экран
+            покажет курс, сумму получения и итог без перехода к tracker или
+            receipt.
+          </p>
+        </ShellCard>
+      </div>
+    </section>
+  )
 }
