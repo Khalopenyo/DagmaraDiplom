@@ -5,6 +5,7 @@ export interface TopLevelRoute {
   supportingCopy: string
   ctaLabel: string
   boundaryMode: 'intro-card' | 'inline-helper'
+  contentWidth: 'full' | 'narrow'
 }
 
 export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
@@ -16,6 +17,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
       'Стартовая точка desktop-demo. Здесь пользователь должен сразу понять структуру приложения и границы симуляции.',
     ctaLabel: 'Перейти к переводу',
     boundaryMode: 'intro-card',
+    contentWidth: 'full',
   },
   {
     path: '/transfers',
@@ -25,6 +27,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
       'Соберите черновик перевода для corridor Россия → Китай: выберите способ отправки, получателя и сумму списания, чтобы увидеть прозрачный simulated quote.',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'intro-card',
+    contentWidth: 'narrow',
   },
   {
     path: '/rates',
@@ -34,6 +37,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
       'Здесь появится справочник симулированных курсов дружественных стран. Не показывать фактическую таблицу до Phase 2.',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'inline-helper',
+    contentWidth: 'narrow',
   },
   {
     path: '/settings',
@@ -43,6 +47,7 @@ export const TOP_LEVEL_ROUTES: readonly TopLevelRoute[] = [
       'Раздел зарезервирован под границы demo и перезапуск сценария. В Phase 1 оставляйте его описательным.',
     ctaLabel: 'Вернуться на главную',
     boundaryMode: 'inline-helper',
+    contentWidth: 'narrow',
   },
 ] as const
 

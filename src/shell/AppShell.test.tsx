@@ -58,18 +58,25 @@ describe('AppShell', () => {
     expect(searchInput).toHaveValue('demo')
   })
 
-  it('keeps the centered page container and header chrome after navigation', async () => {
+  it('keeps the shell container while letting the dashboard expand to full width', async () => {
     const user = userEvent.setup()
 
     renderApp(<AppRoutes />, { route: '/dashboard' })
-    await user.click(screen.getByRole('link', { name: 'Настройки' }))
 
     const pageContainer = screen.getByTestId('page-container')
+    const dashboardContent = screen.getByTestId('page-content')
 
     expect(pageContainer.className).toContain('max-w-[1200px]')
     expect(pageContainer.className).toContain('px-8')
     expect(pageContainer.className).toContain('pt-8')
     expect(pageContainer.className).toContain('pb-12')
+    expect(dashboardContent.className).toContain('max-w-none')
+
+    await user.click(screen.getByRole('link', { name: 'Настройки' }))
+
+    const settingsContent = screen.getByTestId('page-content')
+
+    expect(settingsContent.className).toContain('max-w-[760px]')
     expect(screen.getByText('Simulated demo')).toBeInTheDocument()
     expect(screen.getByText('Здравствуйте, Дагмара')).toBeInTheDocument()
   })
