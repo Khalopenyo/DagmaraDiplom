@@ -6,12 +6,16 @@ import { AppRoutes } from '../app/AppRoutes'
 import { renderApp } from '../test/renderApp'
 
 describe('TransfersPage', () => {
-  it('renders the seeded source account and available balance before confirmation', () => {
+  it('renders the redesigned transfer heading, seeded source account and balance', () => {
     renderApp(<AppRoutes />, { route: '/transfers' })
 
+    expect(
+      screen.getByRole('heading', {
+        name: 'Трансграничный перевод',
+      }),
+    ).toBeInTheDocument()
     expect(screen.getByText('4756 •••• •••• 9018')).toBeInTheDocument()
-    expect(screen.getByText('3 469.52 ЦР')).toBeInTheDocument()
-    expect(screen.getByText('Счет списания')).toBeInTheDocument()
+    expect(screen.getByText('Остаток по счету: 3 469.52 ЦР')).toBeInTheDocument()
   })
 
   it('switches the recipient label between card and phone transfer modes', async () => {
@@ -20,7 +24,7 @@ describe('TransfersPage', () => {
     renderApp(<AppRoutes />, { route: '/transfers' })
 
     expect(
-      screen.getByLabelText('Номер карты получателя'),
+      screen.getByLabelText('Номер счета'),
     ).toBeInTheDocument()
 
     await user.click(
@@ -61,7 +65,7 @@ describe('TransfersPage', () => {
       }),
     )
 
-    const recipientInput = screen.getByLabelText('Номер карты получателя')
+    const recipientInput = screen.getByLabelText('Номер счета')
 
     expect(recipientInput).toHaveValue('2200 0000 0000 5151')
 
@@ -75,17 +79,14 @@ describe('TransfersPage', () => {
 
     renderApp(<AppRoutes />, { route: '/transfers' })
 
-    await user.type(
-      screen.getByLabelText('Номер карты получателя'),
-      '2200000000001746',
-    )
+    await user.type(screen.getByLabelText('Номер счета'), '2200000000001746')
     await user.type(screen.getByLabelText('Сумма списания'), '100')
 
-    expect(screen.getAllByText('1 ЦР = 2.234 ЦЮ')).toHaveLength(2)
-    expect(screen.getAllByText('223.40 ¥')).toHaveLength(2)
+    expect(screen.getByText('1 ЦР = 2.234 ЦЮ')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('223.40')).toBeInTheDocument()
     expect(screen.getByText('10 ₽')).toBeInTheDocument()
     expect(screen.getByText('110 ₽')).toBeInTheDocument()
-    expect(screen.getByText('Комиссия платформы')).toBeInTheDocument()
+    expect(screen.getByText('Комиссия')).toBeInTheDocument()
     expect(screen.getByText('Итого')).toBeInTheDocument()
   })
 
@@ -96,7 +97,7 @@ describe('TransfersPage', () => {
 
     const confirmButton = screen.getByRole('button', { name: 'Подтвердить' })
     const amountInput = screen.getByLabelText('Сумма списания')
-    const recipientInput = screen.getByLabelText('Номер карты получателя')
+    const recipientInput = screen.getByLabelText('Номер счета')
 
     expect(confirmButton).toBeDisabled()
 
@@ -113,7 +114,7 @@ describe('TransfersPage', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: 'Переводы',
+        name: 'Трансграничный перевод',
       }),
     ).toBeInTheDocument()
     expect(

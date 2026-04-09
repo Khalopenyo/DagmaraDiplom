@@ -44,7 +44,7 @@ describe('DashboardPage', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: 'Переводы',
+        name: 'Трансграничный перевод',
       }),
     ).toBeInTheDocument()
   })
@@ -108,7 +108,7 @@ describe('DashboardPage', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: 'Переводы',
+        name: 'Трансграничный перевод',
       }),
     ).toBeInTheDocument()
   })

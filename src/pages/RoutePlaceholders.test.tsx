@@ -13,7 +13,7 @@ import { renderApp } from '../test/renderApp'
 describe('Route placeholders', () => {
   it.each([
     ['/dashboard', 'Демонстрационный маршрут Россия → Китай'],
-    ['/transfers', 'Переводы'],
+    ['/transfers', 'Трансграничный перевод'],
     ['/rates', 'Обмен валют'],
     ['/settings', 'Настройки'],
   ] as const)(
@@ -45,7 +45,7 @@ describe('Route placeholders', () => {
 
     expect(
       screen.getByRole('heading', {
-        name: 'Переводы',
+        name: 'Трансграничный перевод',
       }),
     ).toBeInTheDocument()
   })

@@ -1,15 +1,17 @@
 import {
+  LOCKED_TRANSFER_RATE_LABEL,
   transferModes,
   transferSourceAccounts,
   type DemoFavoriteRecipient,
   type DemoTransferDraftValidationResult,
   type DemoTransferModeId,
+  type DemoTransferQuote,
 } from '../../demo'
-import { ShellCard } from '../../shell/ShellCard'
 import { FavoriteRecipientsStrip } from './FavoriteRecipientsStrip'
 import { TransferTypeSelector } from './TransferTypeSelector'
 
 interface TransferDraftFormProps {
+  canConfirm: boolean
   debitAmount: string
   identifierError?: string | null
   amountError?: string | null
@@ -17,6 +19,7 @@ interface TransferDraftFormProps {
   onFavoriteSelect: (favoriteId: DemoFavoriteRecipient['id']) => void
   onModeChange: (modeId: DemoTransferModeId) => void
   onRecipientIdentifierChange: (value: string) => void
+  quote: DemoTransferQuote
   recipientIdentifier: string
   selectedFavoriteId: DemoFavoriteRecipient['id'] | null
   selectedModeId: DemoTransferModeId
@@ -31,12 +34,35 @@ function ValidationHint({ message }: { message: string }) {
   )
 }
 
+function stripCurrencyMarker(value: string) {
+  return value.replace(/[^\d.\s]/g, '').trim()
+}
+
+function CurrencyIcon({
+  symbol,
+  accentClassName,
+}: {
+  symbol: '¥' | '₽'
+  accentClassName: string
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`inline-flex h-8 w-8 items-center justify-center rounded-full border border-[rgba(24,38,58,0.18)] text-[22px] font-medium ${accentClassName}`}
+    >
+      {symbol}
+    </span>
+  )
+}
+
 export function TransferDraftForm({
+  canConfirm,
   debitAmount,
   onDebitAmountChange,
   onFavoriteSelect,
   onModeChange,
   onRecipientIdentifierChange,
+  quote,
   recipientIdentifier,
   selectedFavoriteId,
   selectedModeId,
@@ -52,103 +78,115 @@ export function TransferDraftForm({
   }
 
   return (
-    <ShellCard className="gap-6 p-8 shadow-[var(--shadow-card)]">
-      <div className="flex flex-col gap-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
-          Черновик перевода
-        </p>
-        <h2 className="text-xl font-semibold text-[var(--color-text-strong)]">
-          Сценарий Россия → Китай
-        </h2>
-        <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-          Заполните реквизиты и сумму списания, чтобы проверить simulated quote
-          по фиксированному corridor без серверных вызовов.
-        </p>
-      </div>
-
-      <section
-        aria-label="Счет списания"
-        className="flex flex-col gap-4 rounded-[20px] border border-[var(--color-border-soft)] bg-[color-mix(in_srgb,var(--color-surface)_92%,rgba(15,108,189,0.08))] p-5"
-      >
-        <div className="flex flex-col gap-1">
-          <p className="text-sm font-semibold leading-6 text-[var(--color-text-strong)]">
-            Счет списания
-          </p>
-          <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-            Единственный executable account для MVP демонстрации.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-4 rounded-[18px] border border-[rgba(15,108,189,0.14)] bg-[var(--color-surface)] p-4">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-lg font-semibold text-[var(--color-text-strong)]">
-                {SOURCE_ACCOUNT.ownerName}
-              </p>
-              <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-                {SOURCE_ACCOUNT.maskedAccountNumber}
-              </p>
-            </div>
-            <span className="rounded-full bg-[rgba(15,108,189,0.08)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
-              Цифровой рубль
+    <section className="rounded-[32px] border border-[rgba(24,38,58,0.08)] bg-white px-5 py-6 shadow-[0_24px_48px_rgba(24,38,58,0.08)] sm:px-6 sm:py-7">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
+          <div
+            aria-label="Счет списания"
+            className="flex items-center justify-between rounded-[18px] border border-[rgba(24,38,58,0.12)] bg-white px-4 py-3 text-[22px] font-medium tracking-[0.02em] text-[var(--color-text-strong)] shadow-[0_12px_24px_rgba(24,38,58,0.04)]"
+          >
+            <span>{SOURCE_ACCOUNT.maskedAccountNumber}</span>
+            <span aria-hidden="true" className="text-[18px] text-[rgba(73,78,101,0.5)]">
+              ⌄
             </span>
           </div>
 
-          <div className="flex flex-col gap-1 border-t border-[var(--color-border-soft)] pt-4">
-            <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-              Доступный остаток
-            </p>
-            <p className="text-[28px] font-semibold leading-[1.2] tracking-[-0.03em] text-[var(--color-accent)]">
-              {SOURCE_ACCOUNT.availableBalanceLabel}
-            </p>
+          <p className="text-sm font-semibold leading-6 text-[#3E38C7]">
+            Остаток по счету: {SOURCE_ACCOUNT.availableBalanceLabel}
+          </p>
+        </div>
+
+        <TransferTypeSelector
+          activeModeId={selectedMode.id}
+          modes={transferModes}
+          onChange={onModeChange}
+        />
+
+        <FavoriteRecipientsStrip
+          onSelect={onFavoriteSelect}
+          selectedFavoriteId={selectedFavoriteId}
+        />
+
+        <div className="grid gap-4">
+          <label className="flex flex-col gap-2">
+            <span className="text-sm font-semibold leading-6 text-[rgba(73,78,101,0.78)]">
+              {selectedMode.id === 'card' ? 'Номер счета' : selectedMode.inputLabel}
+            </span>
+            <input
+              aria-label={selectedMode.id === 'card' ? 'Номер счета' : selectedMode.inputLabel}
+              className="min-h-12 rounded-[16px] border border-[rgba(24,38,58,0.14)] bg-white px-4 py-3 text-base text-[var(--color-text-strong)] outline-none transition-colors duration-150 ease-out placeholder:text-[var(--color-text-muted)] focus:border-[#3E38C7]"
+              inputMode={selectedMode.id === 'phone' ? 'tel' : 'numeric'}
+              onChange={(event) => onRecipientIdentifierChange(event.target.value)}
+              placeholder={selectedMode.placeholder}
+              type="text"
+              value={recipientIdentifier}
+            />
+          </label>
+
+          {identifierError ? <ValidationHint message={identifierError} /> : null}
+
+          <label className="flex items-center gap-3 rounded-[16px] border border-[rgba(24,38,58,0.14)] bg-white px-4 py-3">
+            <CurrencyIcon accentClassName="text-[rgba(92,72,57,0.9)]" symbol="¥" />
+            <input
+              aria-label="Сумма получения"
+              className="min-h-10 flex-1 border-0 bg-transparent px-0 py-0 text-base text-[var(--color-text-strong)] outline-none placeholder:text-[var(--color-text-muted)]"
+              placeholder="0"
+              readOnly
+              tabIndex={-1}
+              type="text"
+              value={stripCurrencyMarker(quote.recipientAmountDisplay)}
+            />
+          </label>
+
+          <label className="flex items-center gap-3 rounded-[16px] border border-[rgba(24,38,58,0.14)] bg-white px-4 py-3">
+            <CurrencyIcon accentClassName="text-[rgba(92,72,57,0.9)]" symbol="₽" />
+            <input
+              aria-label="Сумма списания"
+              className="min-h-10 flex-1 border-0 bg-transparent px-0 py-0 text-base text-[var(--color-text-strong)] outline-none placeholder:text-[var(--color-text-muted)]"
+              inputMode="decimal"
+              onChange={(event) => onDebitAmountChange(event.target.value)}
+              placeholder="100"
+              type="text"
+              value={debitAmount}
+            />
+          </label>
+
+          {amountError ? <ValidationHint message={amountError} /> : null}
+        </div>
+
+        <div className="grid gap-2 rounded-[18px] bg-[rgba(62,56,199,0.04)] px-4 py-4">
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="font-medium text-[rgba(73,78,101,0.76)]">Курс</span>
+            <span className="font-semibold text-[var(--color-text-strong)]">
+              {quote.rateLabel || LOCKED_TRANSFER_RATE_LABEL}
+            </span>
+          </div>
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="font-medium text-[rgba(73,78,101,0.76)]">Комиссия</span>
+            <span className="font-semibold text-[var(--color-text-strong)]">
+              {quote.feeAmountDisplay}
+            </span>
+          </div>
+          <div className="flex items-center justify-between gap-4 text-sm">
+            <span className="font-semibold text-[var(--color-text-strong)]">Итого</span>
+            <span className="text-base font-semibold text-[var(--color-text-strong)]">
+              {quote.totalAmountDisplay}
+            </span>
           </div>
         </div>
-      </section>
 
-      <TransferTypeSelector
-        activeModeId={selectedMode.id}
-        modes={transferModes}
-        onChange={onModeChange}
-      />
-
-      <FavoriteRecipientsStrip
-        onSelect={onFavoriteSelect}
-        selectedFavoriteId={selectedFavoriteId}
-      />
-
-      <div className="grid gap-5">
-        <label className="flex flex-col gap-2">
-          <span className="text-sm font-semibold leading-6 text-[var(--color-text-strong)]">
-            {selectedMode.inputLabel}
-          </span>
-          <input
-            className="min-h-12 rounded-[16px] border border-[var(--color-border-soft)] bg-[var(--color-surface)] px-4 py-3 text-base text-[var(--color-text-strong)] outline-none transition-colors duration-150 ease-out placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)]"
-            inputMode={selectedMode.id === 'phone' ? 'tel' : 'numeric'}
-            onChange={(event) => onRecipientIdentifierChange(event.target.value)}
-            placeholder={selectedMode.placeholder}
-            type="text"
-            value={recipientIdentifier}
-          />
-        </label>
-
-        {identifierError ? <ValidationHint message={identifierError} /> : null}
-
-        <label className="flex flex-col gap-2">
-          <span className="text-sm font-semibold leading-6 text-[var(--color-text-strong)]">
-            Сумма списания
-          </span>
-          <input
-            className="min-h-12 rounded-[16px] border border-[var(--color-border-soft)] bg-[var(--color-surface)] px-4 py-3 text-base text-[var(--color-text-strong)] outline-none transition-colors duration-150 ease-out placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)]"
-            inputMode="decimal"
-            onChange={(event) => onDebitAmountChange(event.target.value)}
-            placeholder="100"
-            type="text"
-            value={debitAmount}
-          />
-        </label>
-
-        {amountError ? <ValidationHint message={amountError} /> : null}
+        <button
+          className={`inline-flex min-h-[56px] items-center justify-center rounded-[18px] px-5 py-4 text-lg font-semibold transition-colors duration-150 ease-out ${
+            canConfirm
+              ? 'bg-[#3E38C7] text-white shadow-[0_18px_32px_rgba(62,56,199,0.24)] hover:bg-[#312cab]'
+              : 'cursor-not-allowed bg-[rgba(62,56,199,0.18)] text-white/80'
+          }`}
+          disabled={!canConfirm}
+          type="button"
+        >
+          Подтвердить
+        </button>
       </div>
-    </ShellCard>
+    </section>
   )
 }

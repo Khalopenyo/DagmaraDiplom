@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 
 import {
   buildTransferQuote,
@@ -11,11 +11,10 @@ import {
 } from '../demo'
 import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
 import { getTopLevelRoute } from '../content/topLevelRoutes'
-import { QuotePreviewCard } from '../features/transfers/QuotePreviewCard'
 import { TransferDraftForm } from '../features/transfers/TransferDraftForm'
-import { ShellCard } from '../shell/ShellCard'
 
 const TRANSFERS_TITLE = 'Переводы'
+const TRANSFERS_HEADING = 'Трансграничный перевод'
 
 function getTransfersRoute() {
   const route = getTopLevelRoute('/transfers')
@@ -65,7 +64,7 @@ function getSeededDebitAmount(searchParams: URLSearchParams) {
 }
 
 export function TransfersPage() {
-  const route = getTransfersRoute()
+  getTransfersRoute()
   const [searchParams] = useSearchParams()
   const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
     transferModes[0].id,
@@ -101,42 +100,36 @@ export function TransfersPage() {
   }
 
   return (
-    <section className="flex flex-col gap-8 pb-6">
-      <ShellCard className="border-[rgba(15,108,189,0.18)] bg-[rgba(15,108,189,0.08)] p-8 shadow-[var(--shadow-card)]">
-        <p className="text-sm font-semibold leading-6 text-[var(--color-accent)]">
-          {PHASE_BOUNDARY_COPY}
-        </p>
-      </ShellCard>
+    <section className="mx-auto flex w-full max-w-[780px] flex-col gap-5 pb-6">
+      <p className="sr-only">{PHASE_BOUNDARY_COPY}</p>
 
-      <div className="flex flex-col gap-4">
-        <h1 className="text-[28px] font-semibold leading-[1.2] text-[var(--color-text-strong)]">
-          {route.pageTitle}
+      <div className="flex items-center gap-3">
+        <Link
+          aria-label="Назад на главную"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[34px] leading-none text-[var(--color-text-strong)] transition-colors duration-150 hover:bg-[rgba(66,54,198,0.08)]"
+          to="/dashboard"
+        >
+          <span aria-hidden="true">‹</span>
+        </Link>
+
+        <h1 className="text-[34px] font-semibold leading-none tracking-[-0.04em] text-[var(--color-text-strong)]">
+          {TRANSFERS_HEADING}
         </h1>
-        <p className="text-base leading-7 text-[var(--color-text-muted)]">
-          {route.supportingCopy}
-        </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.9fr)]">
-        <TransferDraftForm
-          debitAmount={debitAmount}
-          onDebitAmountChange={setDebitAmount}
-          onFavoriteSelect={handleFavoriteSelect}
-          onModeChange={handleModeChange}
-          onRecipientIdentifierChange={setRecipientIdentifier}
-          recipientIdentifier={recipientIdentifier}
-          selectedFavoriteId={selectedFavoriteId}
-          selectedModeId={selectedModeId}
-          validation={validation}
-        />
-
-        <QuotePreviewCard
-          canConfirm={validation.isValid}
-          quote={quote}
-          recipientIdentifier={recipientIdentifier}
-          validation={validation}
-        />
-      </div>
+      <TransferDraftForm
+        canConfirm={validation.isValid}
+        debitAmount={debitAmount}
+        onDebitAmountChange={setDebitAmount}
+        onFavoriteSelect={handleFavoriteSelect}
+        onModeChange={handleModeChange}
+        onRecipientIdentifierChange={setRecipientIdentifier}
+        quote={quote}
+        recipientIdentifier={recipientIdentifier}
+        selectedFavoriteId={selectedFavoriteId}
+        selectedModeId={selectedModeId}
+        validation={validation}
+      />
     </section>
   )
 }
