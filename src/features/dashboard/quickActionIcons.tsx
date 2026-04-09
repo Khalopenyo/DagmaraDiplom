@@ -162,9 +162,27 @@ function ContactsIcon() {
 }
 
 export function QuickActionIcon({ iconKey, accent }: QuickActionIconProps) {
+  const baseToneClassName = {
+    account:
+      'border-[rgba(83,77,201,0.12)] bg-[rgba(83,77,201,0.1)] text-[#534dc9]',
+    transfer:
+      'border-[rgba(239,77,122,0.14)] bg-[rgba(239,77,122,0.1)] text-[#ef4d7a]',
+    cash:
+      'border-[rgba(91,151,255,0.14)] bg-[rgba(91,151,255,0.1)] text-[#5b97ff]',
+    bill: 'border-[rgba(95,198,170,0.16)] bg-[rgba(95,198,170,0.1)] text-[#5fc6aa]',
+    savings:
+      'border-[rgba(96,95,214,0.14)] bg-[rgba(96,95,214,0.1)] text-[#605fd6]',
+    card:
+      'border-[rgba(245,147,67,0.16)] bg-[rgba(245,147,67,0.1)] text-[#f59343]',
+    report:
+      'border-[rgba(67,86,208,0.16)] bg-[rgba(67,86,208,0.1)] text-[#4356d0]',
+    contacts:
+      'border-[rgba(241,99,132,0.16)] bg-[rgba(241,99,132,0.1)] text-[#f16384]',
+  }[iconKey]
+
   const toneClassName = accent
-    ? 'border-[rgba(15,108,189,0.18)] bg-[rgba(15,108,189,0.12)] text-[var(--color-accent)]'
-    : 'border-[var(--color-border-soft)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)]'
+    ? `${baseToneClassName} shadow-[0_12px_24px_rgba(83,77,201,0.16)]`
+    : baseToneClassName
 
   const icon = {
     account: <AccountIcon />,
@@ -180,7 +198,7 @@ export function QuickActionIcon({ iconKey, accent }: QuickActionIconProps) {
   return (
     <span
       aria-hidden="true"
-      className={`inline-flex h-11 w-11 items-center justify-center rounded-[16px] border ${toneClassName}`}
+      className={`inline-flex h-[52px] w-[52px] items-center justify-center rounded-[18px] border ${toneClassName}`}
     >
       {icon}
     </span>

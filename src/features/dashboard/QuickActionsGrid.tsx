@@ -1,5 +1,4 @@
 import { quickActions } from '../../demo'
-import { ShellCard } from '../../shell/ShellCard'
 import { QuickActionTile } from './QuickActionTile'
 
 const QUICK_ACTIONS_HEADING = 'Быстрые действия'
@@ -31,28 +30,25 @@ export function QuickActionsGrid() {
   return (
     <section
       aria-labelledby="dashboard-quick-actions-heading"
-      className="flex flex-col gap-4"
+      className="flex flex-col gap-5"
     >
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap items-end justify-between gap-3">
         <h2
-          className="text-xl font-semibold text-[var(--color-text-strong)]"
+          className="text-lg font-semibold text-[var(--color-text-strong)] sm:text-xl"
           id="dashboard-quick-actions-heading"
         >
           {QUICK_ACTIONS_HEADING}
         </h2>
-        <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-          Один live-переход продолжает corridor `Россия → Китай`, остальные
-          действия фиксируют структуру MVP без недостроенных backend-веток.
+        <p className="max-w-[28ch] text-xs font-medium uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
+          Адаптировано из mobile dashboard в desktop-grid
         </p>
       </div>
 
-      <ShellCard className="gap-5 p-5">
-        <div className="grid gap-4 md:grid-cols-2">
-          {quickActions.map((action) => (
-            <QuickActionTile action={action} key={action.label} />
-          ))}
-        </div>
-      </ShellCard>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {quickActions.map((action) => (
+          <QuickActionTile action={action} key={action.label} />
+        ))}
+      </div>
     </section>
   )
 }
