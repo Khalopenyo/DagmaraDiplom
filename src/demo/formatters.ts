@@ -20,5 +20,5 @@ export function formatAmountWithCurrency(value: number, currencyLabel: string) {
 }
 
 export function formatRateValue(value: number) {
-  return formatDecimalValue(value, 3)
+  return formatDecimalValue(value, 3).replace(/\.?0+$/, '')
 }

@@ -37,10 +37,24 @@ export type DemoQuickAction = DemoDisplayQuickAction | DemoRouteQuickAction
 
 export type DemoCorridorMode = 'primary' | 'reference'
 
-export type DemoCountryBadgeToken = 'china' | 'vietnam' | 'south-korea'
+export type DemoCountryBadgeToken =
+  | 'china'
+  | 'vietnam'
+  | 'south-korea'
+  | 'nicaragua'
+  | 'india'
+  | 'portugal'
+  | 'france'
 
 export interface DemoCbdcRate {
-  country: 'Китай' | 'Вьетнам' | 'Южная Корея'
+  country:
+    | 'Китай'
+    | 'Вьетнам'
+    | 'Южная Корея'
+    | 'Никарагуа'
+    | 'Индия'
+    | 'Португалия'
+    | 'Франция'
   badgeToken: DemoCountryBadgeToken
   corridor: DemoCorridorMode
   baseLabel: '1 ЦР'

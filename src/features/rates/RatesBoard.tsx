@@ -1,8 +1,24 @@
 import { cbdcRates } from '../../demo'
 import { RateRow } from './RateRow'
 
-const EXPECTED_COUNTRY_ORDER = ['Китай', 'Вьетнам', 'Южная Корея'] as const
-const EXPECTED_RATE_VALUES = ['2.234', '1.746', '5.151'] as const
+const EXPECTED_COUNTRY_ORDER = [
+  'Вьетнам',
+  'Никарагуа',
+  'Южная Корея',
+  'Индия',
+  'Китай',
+  'Португалия',
+  'Франция',
+] as const
+const EXPECTED_RATE_VALUES = [
+  '1.746',
+  '12.090',
+  '5.151',
+  '144.400',
+  '2.234',
+  '1.746',
+  '34.560',
+] as const
 
 function assertRatesContract() {
   const actualCountries = cbdcRates.map((rate) => rate.country)

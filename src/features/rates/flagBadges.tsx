@@ -59,6 +59,47 @@ function SouthKoreaFlag() {
   )
 }
 
+function NicaraguaFlag() {
+  return (
+    <svg aria-hidden="true" className="h-[18px] w-[30px]" fill="none" viewBox="0 0 30 18">
+      <rect fill="#2F74D0" height="18" rx="2.5" width="30" />
+      <rect fill="white" height="8" width="30" x="0" y="5" />
+      <circle cx="15" cy="9" fill="#9CC56B" r="1.2" />
+    </svg>
+  )
+}
+
+function IndiaFlag() {
+  return (
+    <svg aria-hidden="true" className="h-[18px] w-[30px]" fill="none" viewBox="0 0 30 18">
+      <rect fill="#F28C3A" height="18" rx="2.5" width="30" />
+      <rect fill="white" height="6" width="30" x="0" y="6" />
+      <rect fill="#2F8B57" height="6" width="30" x="0" y="12" />
+      <circle cx="15" cy="9" fill="none" r="1.8" stroke="#2F5FB3" strokeWidth="1" />
+    </svg>
+  )
+}
+
+function PortugalFlag() {
+  return (
+    <svg aria-hidden="true" className="h-[18px] w-[30px]" fill="none" viewBox="0 0 30 18">
+      <rect fill="#E24B43" height="18" rx="2.5" width="30" />
+      <path d="M2.5 0H12V18H2.5A2.5 2.5 0 0 1 0 15.5v-13A2.5 2.5 0 0 1 2.5 0Z" fill="#2F8B57" />
+      <circle cx="12.5" cy="9" fill="none" r="2.2" stroke="#F4D35E" strokeWidth="1.2" />
+    </svg>
+  )
+}
+
+function FranceFlag() {
+  return (
+    <svg aria-hidden="true" className="h-[18px] w-[30px]" fill="none" viewBox="0 0 30 18">
+      <rect fill="#F5F5F5" height="18" rx="2.5" width="30" />
+      <path d="M2.5 0H10V18H2.5A2.5 2.5 0 0 1 0 15.5v-13A2.5 2.5 0 0 1 2.5 0Z" fill="#2848C5" />
+      <path d="M20 0h7.5A2.5 2.5 0 0 1 30 2.5v13a2.5 2.5 0 0 1-2.5 2.5H20V0Z" fill="#E24B43" />
+    </svg>
+  )
+}
+
 export function CountryFlagBadge({
   badgeToken,
   primary,
@@ -71,6 +112,10 @@ export function CountryFlagBadge({
     china: <ChinaFlag />,
     vietnam: <VietnamFlag />,
     'south-korea': <SouthKoreaFlag />,
+    nicaragua: <NicaraguaFlag />,
+    india: <IndiaFlag />,
+    portugal: <PortugalFlag />,
+    france: <FranceFlag />,
   }[badgeToken]
 
   return (
