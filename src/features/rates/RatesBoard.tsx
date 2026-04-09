@@ -22,7 +22,7 @@ function assertRatesContract(countryOrder: readonly string[]) {
 }
 
 export function RatesBoard() {
-  const { rates } = useLiveCbdcRates()
+  const { rates, rateTrends } = useLiveCbdcRates()
 
   assertRatesContract(rates.map((rate) => rate.country))
 
@@ -43,7 +43,11 @@ export function RatesBoard() {
 
       <div className="flex flex-col">
         {rates.map((rate) => (
-          <RateRow key={rate.country} rate={rate} />
+          <RateRow
+            key={rate.country}
+            rate={rate}
+            trendDirection={rateTrends[rate.forexCode] ?? 'neutral'}
+          />
         ))}
       </div>
     </section>

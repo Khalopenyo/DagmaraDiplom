@@ -2,13 +2,18 @@ import { Link } from 'react-router'
 
 import { formatRateValue, type DemoCbdcRate } from '../../demo'
 import { buildExchangeRoutePath } from '../../content/exchangeRoutes'
+import type { RateTrendDirection } from './useLiveCbdcRates'
 import { CountryFlagBadge } from './flagBadges'
 
 interface RateRowProps {
   rate: DemoCbdcRate
+  trendDirection?: RateTrendDirection
 }
 
-export function RateRow({ rate }: RateRowProps) {
+export function RateRow({
+  rate,
+  trendDirection = 'neutral',
+}: RateRowProps) {
   const isPrimary = rate.corridor === 'primary'
   const corridorLabel = isPrimary ? 'Основной маршрут' : 'Справочно'
 
@@ -37,6 +42,18 @@ export function RateRow({ rate }: RateRowProps) {
           aria-hidden="true"
           className={isPrimary ? 'h-2 w-2 rounded-full bg-[#E24B43]' : 'hidden'}
         />
+        {trendDirection !== 'neutral' ? (
+          <span
+            aria-label={trendDirection === 'up' ? 'Курс вырос' : 'Курс снизился'}
+            className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs ${
+              trendDirection === 'up'
+                ? 'bg-[rgba(37,181,108,0.14)] text-[#25B56C]'
+                : 'bg-[rgba(255,90,114,0.14)] text-[#FF5A72]'
+            }`}
+          >
+            {trendDirection === 'up' ? '↑' : '↓'}
+          </span>
+        ) : null}
         <p className="text-right text-[17px] font-medium text-[var(--color-text-strong)] sm:text-[18px]">
           {formatRateValue(rate.rateValue)}
         </p>
