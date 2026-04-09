@@ -61,4 +61,47 @@ describe('CurrencyExchangePage', () => {
       }),
     ).toHaveAttribute('href', '/transfers?amount=1000')
   })
+
+  it('shows all currencies in the selector and switches to the chosen country', async () => {
+    const user = userEvent.setup()
+
+    renderApp(<AppRoutes />, { route: '/rates/exchange/china' })
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Открыть список валют получения. Сейчас ЦЮ',
+      }),
+    )
+
+    expect(
+      screen.getByRole('button', {
+        name: 'Выбрать валюту Россия ЦР',
+      }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Выбрать валюту Вьетнам ЦВ',
+      }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Выбрать валюту Индия ЦИ',
+      }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Выбрать валюту Франция ЦФ',
+      }),
+    ).toBeInTheDocument()
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Выбрать валюту Индия ЦИ',
+      }),
+    )
+
+    expect(screen.getByText('Индия')).toBeInTheDocument()
+    expect(screen.getByLabelText('Сумма получения в ЦИ')).toHaveValue('144400')
+    expect(screen.getByText('1 ЦР = 144.4 ЦИ')).toBeInTheDocument()
+  })
 })

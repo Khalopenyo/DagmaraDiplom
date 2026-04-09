@@ -1,12 +1,31 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router'
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
 
-import { cbdcRates, formatRateValue } from '../demo'
+import { cbdcRates, formatRateValue, type DemoCountryBadgeToken } from '../demo'
 import { ExchangeHeroIllustration } from '../features/exchange/ExchangeHeroIllustration'
 import { CountryFlagBadge } from '../features/rates/flagBadges'
 
 const DEFAULT_DEBIT_AMOUNT = '1000'
 const BASE_CURRENCY_LABEL = 'ЦР'
+const BASE_COUNTRY_LABEL = 'Россия'
+
+type ExchangeSelectorSide = 'source' | 'recipient'
+
+interface BaseCurrencyOption {
+  badgeToken: 'russia'
+  country: typeof BASE_COUNTRY_LABEL
+  currencyLabel: typeof BASE_CURRENCY_LABEL
+  primary: false
+}
+
+interface ForeignCurrencyOption {
+  badgeToken: DemoCountryBadgeToken
+  country: (typeof cbdcRates)[number]['country']
+  currencyLabel: (typeof cbdcRates)[number]['targetCurrencyLabel']
+  primary: boolean
+}
+
+type ExchangeCurrencyOption = BaseCurrencyOption | ForeignCurrencyOption
 
 function sanitizeAmountInput(value: string) {
   const normalizedValue = value.replace(',', '.')
@@ -42,22 +61,56 @@ function formatExchangeAmount(value: number) {
   return value.toFixed(3).replace(/\.?0+$/, '')
 }
 
+function buildExchangeSearch(amount: string, isReverseDirection: boolean) {
+  const searchParams = new URLSearchParams()
+  const normalizedAmount = sanitizeAmountInput(amount)
+
+  if (normalizedAmount.length > 0) {
+    searchParams.set('amount', normalizedAmount)
+  }
+
+  if (isReverseDirection) {
+    searchParams.set('direction', 'reverse')
+  }
+
+  const search = searchParams.toString()
+
+  return search.length > 0 ? `?${search}` : ''
+}
+
+function RubleBadge() {
+  return (
+    <span className="inline-flex h-[26px] w-[42px] items-center justify-center rounded-[4px] bg-[rgba(62,56,199,0.08)] text-[11px] font-semibold tracking-[0.08em] text-[#3E38C7] shadow-[0_0_0_1px_rgba(24,38,58,0.06)]">
+      РФ
+    </span>
+  )
+}
+
 export function CurrencyExchangePage() {
   const { badgeToken } = useParams()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const selectedRate = cbdcRates.find(
     (rate) => rate.badgeToken === badgeToken,
   )
   const [debitAmount, setDebitAmount] = useState(DEFAULT_DEBIT_AMOUNT)
   const [isReverseDirection, setIsReverseDirection] = useState(false)
+  const [openSelector, setOpenSelector] = useState<ExchangeSelectorSide | null>(null)
 
   if (!selectedRate) {
     return <Navigate replace to="/rates" />
   }
 
+  const directionParam = searchParams.get('direction')
+  const amountParam = searchParams.get('amount')
+
   useEffect(() => {
-    setDebitAmount(DEFAULT_DEBIT_AMOUNT)
-    setIsReverseDirection(false)
-  }, [badgeToken])
+    const normalizedAmount = sanitizeAmountInput(amountParam ?? DEFAULT_DEBIT_AMOUNT)
+
+    setDebitAmount(normalizedAmount.length > 0 ? normalizedAmount : DEFAULT_DEBIT_AMOUNT)
+    setIsReverseDirection(directionParam === 'reverse')
+    setOpenSelector(null)
+  }, [amountParam, badgeToken, directionParam])
 
   const parsedDebitAmount = parseAmount(debitAmount)
   const sourceCurrencyLabel = isReverseDirection
@@ -85,13 +138,119 @@ export function CurrencyExchangePage() {
     transferSeedAmount.length > 0
       ? `/transfers?amount=${encodeURIComponent(transferSeedAmount)}`
       : '/transfers'
+  const currencyOptions: ExchangeCurrencyOption[] = [
+    {
+      badgeToken: 'russia',
+      country: BASE_COUNTRY_LABEL,
+      currencyLabel: BASE_CURRENCY_LABEL,
+      primary: false,
+    },
+    ...cbdcRates.map((rate) => ({
+      badgeToken: rate.badgeToken,
+      country: rate.country,
+      currencyLabel: rate.targetCurrencyLabel,
+      primary: rate.corridor === 'primary',
+    })),
+  ]
 
   function handleSwapCurrencies() {
+    setOpenSelector(null)
+
     if (recipientAmount.length > 0) {
       setDebitAmount(recipientAmount)
     }
 
     setIsReverseDirection((value) => !value)
+  }
+
+  function handleCurrencySelection(
+    side: ExchangeSelectorSide,
+    option: ExchangeCurrencyOption,
+  ) {
+    const nextIsReverseDirection = option.badgeToken === 'russia'
+      ? side === 'recipient'
+      : side === 'source'
+    const nextBadgeToken = option.badgeToken === 'russia'
+      ? selectedRate.badgeToken
+      : option.badgeToken
+    const isDirectionChanging = nextIsReverseDirection !== isReverseDirection
+    const isRateChanging = nextBadgeToken !== selectedRate.badgeToken
+    const nextAmount = isRateChanging && isDirectionChanging
+      ? DEFAULT_DEBIT_AMOUNT
+      : isDirectionChanging
+        ? (recipientAmount.length > 0 ? recipientAmount : debitAmount)
+        : debitAmount
+
+    setOpenSelector(null)
+
+    if (!isRateChanging) {
+      setDebitAmount(nextAmount.length > 0 ? nextAmount : DEFAULT_DEBIT_AMOUNT)
+      setIsReverseDirection(nextIsReverseDirection)
+      return
+    }
+
+    navigate(
+      `/rates/exchange/${nextBadgeToken}${buildExchangeSearch(
+        nextAmount.length > 0 ? nextAmount : DEFAULT_DEBIT_AMOUNT,
+        nextIsReverseDirection,
+      )}`,
+    )
+  }
+
+  function renderCurrencyMenu(side: ExchangeSelectorSide) {
+    const activeCurrencyLabel = side === 'source'
+      ? sourceCurrencyLabel
+      : recipientCurrencyLabel
+
+    return (
+      <div className="absolute right-0 top-[calc(100%+12px)] z-30 w-[min(320px,calc(100vw-3rem))] rounded-[24px] border border-[rgba(43,56,92,0.12)] bg-white p-2 shadow-[0_24px_48px_rgba(24,38,58,0.12)]">
+        <p className="px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[rgba(43,56,92,0.45)]">
+          Все валюты
+        </p>
+
+        <div className="flex flex-col gap-1">
+          {currencyOptions.map((option) => {
+            const isActive = option.currencyLabel === activeCurrencyLabel
+              && (
+                option.badgeToken === 'russia'
+                  || option.badgeToken === selectedRate.badgeToken
+              )
+
+            return (
+              <button
+                aria-label={`Выбрать валюту ${option.country} ${option.currencyLabel}`}
+                className={`flex items-center gap-3 rounded-[18px] px-3 py-3 text-left transition-colors duration-150 ${
+                  isActive
+                    ? 'bg-[rgba(62,56,199,0.08)]'
+                    : 'hover:bg-[rgba(43,56,92,0.04)]'
+                }`}
+                key={`${side}-${option.badgeToken}`}
+                onClick={() => handleCurrencySelection(side, option)}
+                type="button"
+              >
+                {option.badgeToken === 'russia' ? (
+                  <RubleBadge />
+                ) : (
+                  <CountryFlagBadge
+                    badgeToken={option.badgeToken}
+                    primary={option.primary}
+                  />
+                )}
+
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-[var(--color-text-strong)]">
+                    {option.country}
+                  </span>
+                  <span className="block text-xs text-[rgba(43,56,92,0.52)]">
+                    {option.currencyLabel}
+                  </span>
+                </span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -143,17 +302,21 @@ export function CurrencyExchangePage() {
               aria-hidden="true"
               className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
             />
-            <button
-              aria-label={`Сменить валюту списания. Сейчас ${sourceCurrencyLabel}`}
-              className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)] transition-transform duration-150 hover:scale-[1.02]"
-              onClick={handleSwapCurrencies}
-              type="button"
-            >
-              {sourceCurrencyLabel}
-              <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
-                ⌄
-              </span>
-            </button>
+            <div className="relative shrink-0">
+              <button
+                aria-label={`Открыть список валют списания. Сейчас ${sourceCurrencyLabel}`}
+                className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)] transition-transform duration-150 hover:scale-[1.02]"
+                onClick={() => setOpenSelector((value) => value === 'source' ? null : 'source')}
+                type="button"
+              >
+                {sourceCurrencyLabel}
+                <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
+                  ⌄
+                </span>
+              </button>
+
+              {openSelector === 'source' ? renderCurrencyMenu('source') : null}
+            </div>
           </div>
 
           <button
@@ -182,17 +345,21 @@ export function CurrencyExchangePage() {
               aria-hidden="true"
               className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
             />
-            <button
-              aria-label={`Сменить валюту получения. Сейчас ${recipientCurrencyLabel}`}
-              className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)] transition-transform duration-150 hover:scale-[1.02]"
-              onClick={handleSwapCurrencies}
-              type="button"
-            >
-              {recipientCurrencyLabel}
-              <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
-                ⌄
-              </span>
-            </button>
+            <div className="relative shrink-0">
+              <button
+                aria-label={`Открыть список валют получения. Сейчас ${recipientCurrencyLabel}`}
+                className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)] transition-transform duration-150 hover:scale-[1.02]"
+                onClick={() => setOpenSelector((value) => value === 'recipient' ? null : 'recipient')}
+                type="button"
+              >
+                {recipientCurrencyLabel}
+                <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
+                  ⌄
+                </span>
+              </button>
+
+              {openSelector === 'recipient' ? renderCurrencyMenu('recipient') : null}
+            </div>
           </div>
 
           <div className="flex items-end justify-between gap-4 pt-2">
