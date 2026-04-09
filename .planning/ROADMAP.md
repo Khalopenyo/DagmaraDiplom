@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Demo Shell & Boundaries** - Establish the desktop SPA shell, navigation, and visible simulation framing. (completed 2026-04-08)
 - [x] **Phase 2: Dashboard & Rates Context** - Show the seeded account context and simulated corridor rates before editing a transfer. (completed 2026-04-08)
-- [ ] **Phase 3: Transfer Draft & Quote Transparency** - Let the user compose a transfer and inspect the conversion before submission.
+- [x] **Phase 3: Transfer Draft & Quote Transparency** - Let the user compose a transfer and inspect the conversion before submission. (completed 2026-04-09)
 - [ ] **Phase 4: Transaction Simulation & Receipt** - Submit the transfer, simulate deterministic processing, and present the final cheque.
 - [ ] **Phase 5: Demo Reset & Settings** - Explain the prototype boundaries and reset the seeded demo state for repeated presentations.
 
@@ -62,9 +62,9 @@ Plans:
   4. User cannot continue when required fields are missing or when the entered amount exceeds the available balance.
 **Plans**: 3 plans
 Plans:
-- [ ] `03-01-PLAN.md` — Create transfer-specific seed data, quote helpers, and validation tests under the shared demo layer.
-- [ ] `03-02-PLAN.md` — Replace the transfers placeholder with the editable draft form, source-account selector, mode switch, and favorite-recipient interactions.
-- [ ] `03-03-PLAN.md` — Add derived quote preview, deterministic fee/total breakdown, and confirm gating tests for the transfer route.
+- [x] `03-01-PLAN.md` — Create transfer-specific seed data, quote helpers, and validation tests under the shared demo layer.
+- [x] `03-02-PLAN.md` — Replace the transfers placeholder with the editable draft form, source-account selector, mode switch, and favorite-recipient interactions.
+- [x] `03-03-PLAN.md` — Add derived quote preview, deterministic fee/total breakdown, and confirm gating tests for the transfer route.
 **UI hint**: yes
 
 ### Phase 4: Transaction Simulation & Receipt
@@ -98,6 +98,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Demo Shell & Boundaries | 4/4 | Complete   | 2026-04-08 |
 | 2. Dashboard & Rates Context | 3/3 | Complete | 2026-04-08 |
-| 3. Transfer Draft & Quote Transparency | 0/3 | Planned | - |
+| 3. Transfer Draft & Quote Transparency | 3/3 | Complete | 2026-04-09 |
 | 4. Transaction Simulation & Receipt | 0/TBD | Not started | - |
 | 5. Demo Reset & Settings | 0/TBD | Not started | - |
