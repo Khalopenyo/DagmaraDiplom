@@ -16,16 +16,17 @@
 
 - [x] Phase 2 validated seeded dashboard context: one fixed account card for `Дагмара`, masked number `4756 •••• •••• 9018`, starting balance `3 469.52 ЦР`, and eight quick actions with only `Переводы` live.
 - [x] Phase 2 validated simulated rates context: a read-only three-row CBDC directory for Китай, Вьетнам и Южная Корея, with China visually primary and the other two rows reference-only.
+- [x] Phase 3 validated the editable `/transfers` draft: one seeded source account, card/phone transfer modes, favorites `Emma` and `Justin`, deterministic quote math, and confirm gating before processing.
 
 ### Active
 
-- [ ] Смоделировать основной флоу трансграничного перевода: выбор счета, способа перевода, получателя, суммы списания и суммы получения после конвертации.
+- [ ] Завершить основной флоу трансграничного перевода: подтвердить подготовленный draft, запустить детерминированный processing и показать receipt без backend-интеграций.
 - [ ] Визуализировать процесс прохождения транзакции через шлюзы центральных банков с поэтапным статусом и электронным чеком.
 - [ ] Адаптировать существующий мобильный UI-дизайн под десктопный веб-интерфейс с боковой навигацией, верхней панелью и ограниченной шириной контента.
 
 ## Current State
 
-Phase 2 complete: dashboard and rates routes are live, seeded, and test-covered inside the desktop shell. The next active concern is Phase 3, where the fixed Russia -> China corridor moves from read-only context into an editable transfer draft with visible quote math and validation.
+Phase 3 complete: dashboard, rates, and transfer-draft routes are live, seeded, and test-covered inside the desktop shell. The next active concern is Phase 4, where the approved Russia -> China draft must transition into deterministic transaction simulation, tracker states, and a receipt that reuses the same confirmed amounts.
 
 ### Out of Scope
 
@@ -81,4 +82,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 after Phase 2 completion*
+*Last updated: 2026-04-09 after Phase 3 completion*
