@@ -33,8 +33,6 @@ function ValidationHint({ message }: { message: string }) {
 
 export function TransferDraftForm({
   debitAmount,
-  identifierError,
-  amountError,
   onDebitAmountChange,
   onFavoriteSelect,
   onModeChange,
@@ -46,6 +44,8 @@ export function TransferDraftForm({
 }: TransferDraftFormProps) {
   const selectedMode =
     transferModes.find((mode) => mode.id === selectedModeId) ?? transferModes[0]
+  const identifierError = validation?.identifierError ?? null
+  const amountError = validation?.amountError ?? null
 
   if (!SOURCE_ACCOUNT) {
     throw new Error('Transfer source account seed is missing.')
@@ -148,10 +148,6 @@ export function TransferDraftForm({
         </label>
 
         {amountError ? <ValidationHint message={amountError} /> : null}
-
-        {validation && !validation.isValid && !identifierError && !amountError ? (
-          <ValidationHint message="Проверьте реквизиты и сумму перед подтверждением." />
-        ) : null}
       </div>
     </ShellCard>
   )

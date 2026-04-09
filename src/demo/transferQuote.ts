@@ -56,11 +56,13 @@ export function validateTransferDraft(
         : null
 
   const amountError =
-    draft.debitAmount <= 0
-      ? 'Укажите сумму списания больше нуля.'
-      : draft.debitAmount > accountSummary.balanceAmount
-        ? `Сумма превышает доступный остаток ${accountSummary.balanceAmount.toFixed(2)}.`
-        : null
+    !Number.isFinite(draft.debitAmount)
+      ? 'Укажите корректную сумму списания.'
+      : draft.debitAmount <= 0
+        ? 'Укажите сумму списания больше нуля.'
+        : draft.debitAmount > accountSummary.balanceAmount
+          ? `Сумма превышает доступный остаток ${accountSummary.balanceAmount.toFixed(2)}.`
+          : null
 
   return {
     isValid: identifierError === null && amountError === null,

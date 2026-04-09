@@ -11,6 +11,13 @@ export {
 } from './formatters'
 export { quickActions } from './quickActions'
 export {
+  buildTransferQuote,
+  LOCKED_CHINA_RATE,
+  LOCKED_CHINA_RATE_LABEL,
+  PLATFORM_FEE_RUBLES,
+  validateTransferDraft,
+} from './transferQuote'
+export {
   LOCKED_TRANSFER_RATE_LABEL,
   transferModes,
   transferSourceAccounts,

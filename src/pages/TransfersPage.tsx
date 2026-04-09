@@ -1,13 +1,16 @@
 import { useState } from 'react'
 
 import {
+  buildTransferQuote,
   favoriteRecipients,
   transferModes,
+  validateTransferDraft,
   type DemoFavoriteRecipient,
   type DemoTransferModeId,
 } from '../demo'
 import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
 import { getTopLevelRoute } from '../content/topLevelRoutes'
+import { QuotePreviewCard } from '../features/transfers/QuotePreviewCard'
 import { TransferDraftForm } from '../features/transfers/TransferDraftForm'
 import { ShellCard } from '../shell/ShellCard'
 
@@ -36,6 +39,18 @@ function getFavoriteIdentifier(
   return modeId === 'card' ? favorite.cardValue : favorite.phoneValue
 }
 
+function parseDebitAmount(value: string) {
+  const normalizedValue = value.replace(/\s+/g, '').replace(',', '.')
+
+  if (normalizedValue.length === 0) {
+    return Number.NaN
+  }
+
+  const parsedValue = Number(normalizedValue)
+
+  return Number.isFinite(parsedValue) ? parsedValue : Number.NaN
+}
+
 export function TransfersPage() {
   const route = getTransfersRoute()
   const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
@@ -46,6 +61,15 @@ export function TransfersPage() {
   >(null)
   const [recipientIdentifier, setRecipientIdentifier] = useState('')
   const [debitAmount, setDebitAmount] = useState('')
+  const parsedDebitAmount = parseDebitAmount(debitAmount)
+  const validation = validateTransferDraft({
+    mode: selectedModeId,
+    recipientIdentifier,
+    debitAmount: parsedDebitAmount,
+  })
+  const quote = buildTransferQuote(
+    Number.isFinite(parsedDebitAmount) ? parsedDebitAmount : 0,
+  )
 
   function handleModeChange(nextModeId: DemoTransferModeId) {
     setSelectedModeId(nextModeId)
@@ -87,21 +111,15 @@ export function TransfersPage() {
           recipientIdentifier={recipientIdentifier}
           selectedFavoriteId={selectedFavoriteId}
           selectedModeId={selectedModeId}
+          validation={validation}
         />
 
-        <ShellCard className="gap-4 border-[var(--color-border-soft)] bg-[color-mix(in_srgb,var(--color-surface)_94%,rgba(15,108,189,0.05))] p-8 shadow-[var(--shadow-card)]">
-          <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[var(--color-accent)]">
-            Следующий шаг
-          </p>
-          <h2 className="text-xl font-semibold text-[var(--color-text-strong)]">
-            Quote появится справа в этой же рабочей области
-          </h2>
-          <p className="text-sm leading-6 text-[var(--color-text-muted)]">
-            В этой фазе пользователь уже заполняет реальный draft. Следом экран
-            покажет курс, сумму получения и итог без перехода к tracker или
-            receipt.
-          </p>
-        </ShellCard>
+        <QuotePreviewCard
+          canConfirm={validation.isValid}
+          quote={quote}
+          recipientIdentifier={recipientIdentifier}
+          validation={validation}
+        />
       </div>
     </section>
   )
