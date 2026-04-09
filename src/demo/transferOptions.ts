@@ -14,7 +14,7 @@ export const transferSourceAccounts = [
       accountSummary.balanceAmount,
       accountSummary.currencyLabel,
     ),
-    currencyLabel: accountSummary.currencyLabel,
+    currencyLabel: 'ЦР',
   },
 ] as const satisfies readonly DemoTransferSourceAccount[]
 

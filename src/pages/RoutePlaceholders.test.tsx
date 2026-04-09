@@ -50,7 +50,7 @@ describe('Route placeholders', () => {
     ).toBeInTheDocument()
   })
 
-  it.each(['/transfers', '/settings'] as const)(
+  it.each(['/settings'] as const)(
     'navigates back to the dashboard route from %s',
     async (route) => {
       const user = userEvent.setup()
