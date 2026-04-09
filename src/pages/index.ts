@@ -1,4 +1,5 @@
 export { DashboardPage } from './DashboardPage'
+export { CurrencyExchangePage } from './CurrencyExchangePage'
 export { TransfersPage } from './TransfersPage'
 export { RatesPage } from './RatesPage'
 export { SettingsPage } from './SettingsPage'

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router'
 
 import {
   buildTransferQuote,
@@ -51,8 +52,21 @@ function parseDebitAmount(value: string) {
   return Number.isFinite(parsedValue) ? parsedValue : Number.NaN
 }
 
+function getSeededDebitAmount(searchParams: URLSearchParams) {
+  const amountParam = searchParams.get('amount')
+
+  if (!amountParam) {
+    return ''
+  }
+
+  const parsedAmount = parseDebitAmount(amountParam)
+
+  return Number.isFinite(parsedAmount) && parsedAmount > 0 ? amountParam : ''
+}
+
 export function TransfersPage() {
   const route = getTransfersRoute()
+  const [searchParams] = useSearchParams()
   const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
     transferModes[0].id,
   )
@@ -60,7 +74,9 @@ export function TransfersPage() {
     DemoFavoriteRecipient['id'] | null
   >(null)
   const [recipientIdentifier, setRecipientIdentifier] = useState('')
-  const [debitAmount, setDebitAmount] = useState('')
+  const [debitAmount, setDebitAmount] = useState(() =>
+    getSeededDebitAmount(searchParams),
+  )
   const parsedDebitAmount = parseDebitAmount(debitAmount)
   const validation = validateTransferDraft({
     mode: selectedModeId,

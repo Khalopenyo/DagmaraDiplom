@@ -26,6 +26,16 @@ describe('AppRoutes', () => {
     ).toBeInTheDocument()
   })
 
+  it('renders the exchange route inside the SPA router tree', () => {
+    renderApp(<AppRoutes />, { route: '/rates/exchange/china' })
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Обмен',
+      }),
+    ).toBeInTheDocument()
+  })
+
   it('renders the in-app not-found stub for unknown routes', () => {
     renderApp(<AppRoutes />, { route: '/missing-route' })
 

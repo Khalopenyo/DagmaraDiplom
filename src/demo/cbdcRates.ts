@@ -6,6 +6,7 @@ export const cbdcRates = [
     badgeToken: 'vietnam',
     corridor: 'reference',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦВ',
     rateValue: 1.746,
   },
   {
@@ -13,6 +14,7 @@ export const cbdcRates = [
     badgeToken: 'nicaragua',
     corridor: 'reference',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦН',
     rateValue: 12.09,
   },
   {
@@ -20,6 +22,7 @@ export const cbdcRates = [
     badgeToken: 'south-korea',
     corridor: 'reference',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦК',
     rateValue: 5.151,
   },
   {
@@ -27,6 +30,7 @@ export const cbdcRates = [
     badgeToken: 'india',
     corridor: 'reference',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦИ',
     rateValue: 144.4,
   },
   {
@@ -34,6 +38,7 @@ export const cbdcRates = [
     badgeToken: 'china',
     corridor: 'primary',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦЮ',
     rateValue: 2.234,
   },
   {
@@ -41,6 +46,7 @@ export const cbdcRates = [
     badgeToken: 'portugal',
     corridor: 'reference',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦП',
     rateValue: 1.746,
   },
   {
@@ -48,6 +54,7 @@ export const cbdcRates = [
     badgeToken: 'france',
     corridor: 'reference',
     baseLabel: '1 ЦР',
+    targetCurrencyLabel: 'ЦФ',
     rateValue: 34.56,
   },
 ] as const satisfies readonly DemoCbdcRate[]

@@ -58,6 +58,7 @@ export interface DemoCbdcRate {
   badgeToken: DemoCountryBadgeToken
   corridor: DemoCorridorMode
   baseLabel: '1 ЦР'
+  targetCurrencyLabel: 'ЦВ' | 'ЦН' | 'ЦК' | 'ЦИ' | 'ЦЮ' | 'ЦП' | 'ЦФ'
   rateValue: number
 }
 
