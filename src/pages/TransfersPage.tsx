@@ -1,20 +1,24 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 
 import {
   buildTransferQuote,
+  cbdcRates,
   favoriteRecipients,
   transferModes,
   validateTransferDraft,
+  type DemoCountryBadgeToken,
   type DemoFavoriteRecipient,
   type DemoTransferModeId,
 } from '../demo'
 import { PHASE_BOUNDARY_COPY } from '../content/demoCopy'
 import { getTopLevelRoute } from '../content/topLevelRoutes'
+import { useLiveCbdcRates } from '../features/rates/useLiveCbdcRates'
 import { TransferDraftForm } from '../features/transfers/TransferDraftForm'
 
 const TRANSFERS_TITLE = 'Переводы'
 const TRANSFERS_HEADING = 'Трансграничный перевод'
+const DEFAULT_TRANSFER_TARGET_BADGE_TOKEN: DemoCountryBadgeToken = 'china'
 
 function getTransfersRoute() {
   const route = getTopLevelRoute('/transfers')
@@ -63,12 +67,27 @@ function getSeededDebitAmount(searchParams: URLSearchParams) {
   return Number.isFinite(parsedAmount) && parsedAmount > 0 ? amountParam : ''
 }
 
+function isDemoCountryBadgeToken(value: string | null): value is DemoCountryBadgeToken {
+  return cbdcRates.some((rate) => rate.badgeToken === value)
+}
+
+function getSeededTargetBadgeToken(searchParams: URLSearchParams): DemoCountryBadgeToken {
+  const currencyParam = searchParams.get('currency')
+
+  return isDemoCountryBadgeToken(currencyParam)
+    ? currencyParam
+    : DEFAULT_TRANSFER_TARGET_BADGE_TOKEN
+}
+
 export function TransfersPage() {
   getTransfersRoute()
   const [searchParams] = useSearchParams()
+  const { rates } = useLiveCbdcRates()
   const [selectedModeId, setSelectedModeId] = useState<DemoTransferModeId>(
     transferModes[0].id,
   )
+  const [selectedTargetBadgeToken, setSelectedTargetBadgeToken] =
+    useState<DemoCountryBadgeToken>(() => getSeededTargetBadgeToken(searchParams))
   const [selectedFavoriteId, setSelectedFavoriteId] = useState<
     DemoFavoriteRecipient['id'] | null
   >(null)
@@ -76,6 +95,11 @@ export function TransfersPage() {
   const [debitAmount, setDebitAmount] = useState(() =>
     getSeededDebitAmount(searchParams),
   )
+  const selectedTargetRate = rates.find(
+    (rate) => rate.badgeToken === selectedTargetBadgeToken,
+  ) ?? rates.find(
+    (rate) => rate.badgeToken === DEFAULT_TRANSFER_TARGET_BADGE_TOKEN,
+  ) ?? rates[0]
   const parsedDebitAmount = parseDebitAmount(debitAmount)
   const validation = validateTransferDraft({
     mode: selectedModeId,
@@ -84,7 +108,13 @@ export function TransfersPage() {
   })
   const quote = buildTransferQuote(
     Number.isFinite(parsedDebitAmount) ? parsedDebitAmount : 0,
+    selectedTargetRate,
   )
+
+  useEffect(() => {
+    setDebitAmount(getSeededDebitAmount(searchParams))
+    setSelectedTargetBadgeToken(getSeededTargetBadgeToken(searchParams))
+  }, [searchParams])
 
   function handleModeChange(nextModeId: DemoTransferModeId) {
     setSelectedModeId(nextModeId)
@@ -118,16 +148,19 @@ export function TransfersPage() {
       </div>
 
       <TransferDraftForm
+        availableCurrencies={rates}
         canConfirm={validation.isValid}
         debitAmount={debitAmount}
         onDebitAmountChange={setDebitAmount}
         onFavoriteSelect={handleFavoriteSelect}
         onModeChange={handleModeChange}
         onRecipientIdentifierChange={setRecipientIdentifier}
+        onTargetCurrencyChange={setSelectedTargetBadgeToken}
         quote={quote}
         recipientIdentifier={recipientIdentifier}
         selectedFavoriteId={selectedFavoriteId}
         selectedModeId={selectedModeId}
+        selectedTargetRate={selectedTargetRate}
         validation={validation}
       />
     </section>

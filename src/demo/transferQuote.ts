@@ -1,6 +1,9 @@
+import { cbdcRates } from './cbdcRates'
 import { accountSummary } from './accountSummary'
-import { formatDecimalValue } from './formatters'
+import { formatDecimalValue, formatRateValue } from './formatters'
 import type {
+  DemoCbdcRate,
+  DemoCountryBadgeToken,
   DemoTransferDraftInput,
   DemoTransferDraftValidationResult,
   DemoTransferQuote,
@@ -12,6 +15,25 @@ export const PLATFORM_FEE_RUBLES = 10
 
 const CARD_IDENTIFIER_PATTERN = /^\d{16}$/
 const PHONE_IDENTIFIER_PATTERN = /^\+\d[\d\s()-]{9,}$/
+const TRANSFER_TARGET_SYMBOLS: Record<DemoCountryBadgeToken, string> = {
+  china: '¥',
+  vietnam: '₫',
+  'south-korea': '₩',
+  nicaragua: 'C$',
+  india: '₹',
+  portugal: '€',
+  france: '€',
+}
+
+function getDefaultTransferTargetRate() {
+  const defaultRate = cbdcRates.find((rate) => rate.badgeToken === 'china')
+
+  if (!defaultRate) {
+    throw new Error('Default China transfer rate seed is missing.')
+  }
+
+  return defaultRate
+}
 
 function formatCompactRubleAmount(value: number) {
   const fractionDigits = Number.isInteger(value) ? 0 : 2
@@ -19,18 +41,25 @@ function formatCompactRubleAmount(value: number) {
   return `${formatDecimalValue(value, fractionDigits)} ₽`
 }
 
-export function buildTransferQuote(debitAmount: number): DemoTransferQuote {
-  const recipientAmount = debitAmount * LOCKED_CHINA_RATE
+export function buildTransferQuote(
+  debitAmount: number,
+  targetRate: DemoCbdcRate = getDefaultTransferTargetRate(),
+): DemoTransferQuote {
+  const recipientAmount = debitAmount * targetRate.rateValue
   const feeAmount = PLATFORM_FEE_RUBLES
   const totalAmount = debitAmount + feeAmount
+  const recipientCurrencySymbol = TRANSFER_TARGET_SYMBOLS[targetRate.badgeToken]
 
   return {
-    rateValue: LOCKED_CHINA_RATE,
-    rateLabel: LOCKED_CHINA_RATE_LABEL,
+    targetBadgeToken: targetRate.badgeToken,
+    rateValue: targetRate.rateValue,
+    rateLabel: `1 ЦР = ${formatRateValue(targetRate.rateValue)} ${targetRate.targetCurrencyLabel}`,
     debitAmount,
     debitAmountDisplay: formatCompactRubleAmount(debitAmount),
     recipientAmount,
-    recipientAmountDisplay: `${formatDecimalValue(recipientAmount, 2)} ¥`,
+    recipientCurrencyLabel: targetRate.targetCurrencyLabel,
+    recipientCurrencySymbol,
+    recipientAmountDisplay: `${formatDecimalValue(recipientAmount, 2)} ${recipientCurrencySymbol}`,
     feeAmount,
     feeAmountDisplay: formatCompactRubleAmount(feeAmount),
     totalAmount,

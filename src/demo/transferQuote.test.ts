@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
+import { cbdcRates } from './cbdcRates'
 import {
   LOCKED_CHINA_RATE,
   LOCKED_CHINA_RATE_LABEL,
@@ -19,6 +20,19 @@ describe('buildTransferQuote', () => {
     expect(quote.recipientAmountDisplay).toBe('223.40 ¥')
     expect(quote.feeAmountDisplay).toBe('10 ₽')
     expect(quote.totalAmountDisplay).toBe('110 ₽')
+  })
+
+  it('builds the quote for the selected target currency', () => {
+    const indiaRate = cbdcRates.find((rate) => rate.badgeToken === 'india')
+
+    expect(indiaRate).toBeDefined()
+
+    const quote = buildTransferQuote(5, indiaRate!)
+
+    expect(quote.rateLabel).toBe('1 ЦР = 144.4 ЦИ')
+    expect(quote.recipientCurrencyLabel).toBe('ЦИ')
+    expect(quote.recipientCurrencySymbol).toBe('₹')
+    expect(quote.recipientAmountDisplay).toBe('722.00 ₹')
   })
 })
 

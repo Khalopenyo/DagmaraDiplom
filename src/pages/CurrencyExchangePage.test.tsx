@@ -23,7 +23,7 @@ describe('CurrencyExchangePage', () => {
       screen.getByRole('link', {
         name: 'Перевести',
       }),
-    ).toHaveAttribute('href', '/transfers?amount=1000')
+    ).toHaveAttribute('href', '/transfers?currency=china&amount=1000')
   })
 
   it('recalculates the destination amount while keeping the selected country context', async () => {
@@ -59,7 +59,7 @@ describe('CurrencyExchangePage', () => {
       screen.getByRole('link', {
         name: 'Перевести',
       }),
-    ).toHaveAttribute('href', '/transfers?amount=1000')
+    ).toHaveAttribute('href', '/transfers?currency=china&amount=1000')
   })
 
   it('shows all currencies in the selector and switches to the chosen country', async () => {

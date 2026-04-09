@@ -154,10 +154,15 @@ export function CurrencyExchangePage() {
     ? invertRateTrendDirection(rateTrends[selectedRate.forexCode] ?? 'neutral')
     : (rateTrends[selectedRate.forexCode] ?? 'neutral')
   const transferSeedAmount = isReverseDirection ? recipientAmount : debitAmount.trim()
-  const transferPath =
-    transferSeedAmount.length > 0
-      ? `/transfers?amount=${encodeURIComponent(transferSeedAmount)}`
-      : '/transfers'
+  const transferSearchParams = new URLSearchParams({
+    currency: selectedRate.badgeToken,
+  })
+
+  if (transferSeedAmount.length > 0) {
+    transferSearchParams.set('amount', transferSeedAmount)
+  }
+
+  const transferPath = `/transfers?${transferSearchParams.toString()}`
   const currencyOptions: ExchangeCurrencyOption[] = [
     {
       badgeToken: 'russia',

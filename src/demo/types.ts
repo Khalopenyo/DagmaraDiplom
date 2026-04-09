@@ -95,11 +95,14 @@ export interface DemoTransferDraftInput {
 }
 
 export interface DemoTransferQuote {
+  targetBadgeToken: DemoCountryBadgeToken
   rateValue: number
   rateLabel: string
   debitAmount: number
   debitAmountDisplay: string
   recipientAmount: number
+  recipientCurrencyLabel: DemoCbdcRate['targetCurrencyLabel']
+  recipientCurrencySymbol: string
   recipientAmountDisplay: string
   feeAmount: number
   feeAmountDisplay: string

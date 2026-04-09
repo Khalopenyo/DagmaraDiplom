@@ -16,6 +16,11 @@ describe('TransfersPage', () => {
     ).toBeInTheDocument()
     expect(screen.getByText('4756 •••• •••• 9018')).toBeInTheDocument()
     expect(screen.getByText('Остаток по счету: 3 469.52 ЦР')).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Открыть список валют получения. Сейчас Китай ЦЮ',
+      }),
+    ).toBeInTheDocument()
   })
 
   it('switches the recipient label between card and phone transfer modes', async () => {
@@ -88,6 +93,49 @@ describe('TransfersPage', () => {
     expect(screen.getByText('110 ₽')).toBeInTheDocument()
     expect(screen.getByText('Комиссия')).toBeInTheDocument()
     expect(screen.getByText('Итого')).toBeInTheDocument()
+  })
+
+  it('allows selecting another target currency inside the transfer form', async () => {
+    const user = userEvent.setup()
+
+    renderApp(<AppRoutes />, { route: '/transfers' })
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Открыть список валют получения. Сейчас Китай ЦЮ',
+      }),
+    )
+
+    await user.click(
+      screen.getByRole('button', {
+        name: 'Выбрать валюту Индия ЦИ',
+      }),
+    )
+
+    expect(
+      screen.getByRole('button', {
+        name: 'Открыть список валют получения. Сейчас Индия ЦИ',
+      }),
+    ).toBeInTheDocument()
+
+    await user.type(screen.getByLabelText('Номер счета'), '2200000000001746')
+    await user.type(screen.getByLabelText('Сумма списания'), '5')
+
+    expect(screen.getByText('1 ЦР = 144.4 ЦИ')).toBeInTheDocument()
+    expect(screen.getByLabelText('Сумма получения в ЦИ')).toHaveValue('722.00')
+  })
+
+  it('seeds the amount and selected currency when opened from the exchange screen', () => {
+    renderApp(<AppRoutes />, { route: '/transfers?amount=250&currency=india' })
+
+    expect(screen.getByLabelText('Сумма списания')).toHaveValue('250')
+    expect(
+      screen.getByRole('button', {
+        name: 'Открыть список валют получения. Сейчас Индия ЦИ',
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('1 ЦР = 144.4 ЦИ')).toBeInTheDocument()
+    expect(screen.getByLabelText('Сумма получения в ЦИ')).toHaveValue('36 100.00')
   })
 
   it('keeps confirm disabled for invalid drafts and enables it only for a valid one', async () => {
