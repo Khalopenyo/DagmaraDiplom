@@ -31,7 +31,10 @@ export function AccountSummaryCard() {
         className="pointer-events-none absolute inset-x-12 bottom-1 h-4 rounded-full bg-[#6d5cff]"
       />
 
-      <article className="relative overflow-hidden rounded-[32px] bg-[linear-gradient(135deg,#231d73_0%,#365ee5_62%,#4a81ff_100%)] px-6 py-6 text-white shadow-[0_26px_40px_rgba(35,29,115,0.28)] sm:px-7">
+      <article
+        className="relative overflow-hidden rounded-[32px] bg-[linear-gradient(135deg,#231d73_0%,#365ee5_62%,#4a81ff_100%)] px-6 py-6 text-white shadow-[0_26px_40px_rgba(35,29,115,0.28)] sm:px-7"
+        id="dashboard-account-summary"
+      >
         <div
           aria-hidden="true"
           className="pointer-events-none absolute left-[-18%] top-0 h-full w-[74%] rounded-r-[120px] bg-[#2a227f]"

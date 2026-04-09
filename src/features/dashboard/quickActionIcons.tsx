@@ -3,10 +3,11 @@ import type { DemoQuickAction } from '../../demo'
 interface QuickActionIconProps {
   iconKey: DemoQuickAction['iconKey']
   accent: boolean
+  bare?: boolean
 }
 
 const baseIconClassName = 'h-[18px] w-[18px] shrink-0'
-const accountIconClassName = 'h-[40px] w-[41px] shrink-0'
+const accountIconClassName = 'h-[56px] w-[57px] shrink-0'
 
 function AccountIcon() {
   return (
@@ -198,7 +199,11 @@ function ContactsIcon() {
   )
 }
 
-export function QuickActionIcon({ iconKey, accent }: QuickActionIconProps) {
+export function QuickActionIcon({
+  iconKey,
+  accent,
+  bare = false,
+}: QuickActionIconProps) {
   const baseToneClassName = {
     account:
       'border-[rgba(83,77,201,0.12)] bg-[rgba(83,77,201,0.1)] text-[#534dc9]',
@@ -231,6 +236,14 @@ export function QuickActionIcon({ iconKey, accent }: QuickActionIconProps) {
     report: <ReportIcon />,
     contacts: <ContactsIcon />,
   }[iconKey]
+
+  if (bare) {
+    return (
+      <span aria-hidden="true" className="inline-flex items-center justify-center">
+        {icon}
+      </span>
+    )
+  }
 
   return (
     <span
