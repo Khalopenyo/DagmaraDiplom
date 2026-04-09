@@ -76,10 +76,18 @@ completed: 2026-04-09
 - **Verification:** `npm run test -- src/demo/transferQuote.test.ts --run`, `npm run test -- src/pages/TransfersPage.test.tsx --run`, `npm exec tsc --noEmit`
 - **Committed in:** `1316df4` (part of task commit)
 
+**2. [Rule 3 - Blocking] Repaired phase-gate regression and build drift after full-suite verification**
+- **Found during:** Phase verification after Task 2 completion
+- **Issue:** `RoutePlaceholders.test.tsx` still expected placeholder-only back-navigation from `/transfers`, and `transferOptions.ts` leaked a widened `string` into a literal `ЦР` contract during `npm run build`.
+- **Fix:** Narrowed `currencyLabel` to the exact `ЦР` literal in `src/demo/transferOptions.ts` and limited the placeholder-navigation regression test to routes that still intentionally expose that CTA.
+- **Files modified:** `src/demo/transferOptions.ts`, `src/pages/RoutePlaceholders.test.tsx`
+- **Verification:** `npm run test -- --run`, `npm run build`
+- **Committed in:** `db262b5` (post-plan verification fix)
+
 ---
 
-**Total deviations:** 1 auto-fixed (1 bug)
-**Impact on plan:** The auto-fix was necessary for correctness and kept the quote route safely deterministic. No scope creep.
+**Total deviations:** 2 auto-fixed (1 bug, 1 blocking)
+**Impact on plan:** Both auto-fixes were required to keep the route deterministic and to pass the full project verification gate. No scope creep.
 
 ## Issues Encountered
 
