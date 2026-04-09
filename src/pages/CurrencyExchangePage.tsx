@@ -4,7 +4,10 @@ import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-r
 import { cbdcRates, formatRateValue, type DemoCountryBadgeToken } from '../demo'
 import { ExchangeHeroIllustration } from '../features/exchange/ExchangeHeroIllustration'
 import { CountryFlagBadge } from '../features/rates/flagBadges'
-import { useLiveCbdcRates } from '../features/rates/useLiveCbdcRates'
+import {
+  type RateTrendDirection,
+  useLiveCbdcRates,
+} from '../features/rates/useLiveCbdcRates'
 
 const DEFAULT_DEBIT_AMOUNT = '1000'
 const BASE_CURRENCY_LABEL = 'ЦР'
@@ -87,11 +90,23 @@ function RubleBadge() {
   )
 }
 
+function invertRateTrendDirection(direction: RateTrendDirection): RateTrendDirection {
+  if (direction === 'up') {
+    return 'down'
+  }
+
+  if (direction === 'down') {
+    return 'up'
+  }
+
+  return 'neutral'
+}
+
 export function CurrencyExchangePage() {
   const { badgeToken } = useParams()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const rates = useLiveCbdcRates()
+  const { rates, rateTrends } = useLiveCbdcRates()
   const selectedRate = rates.find(
     (rate) => rate.badgeToken === badgeToken,
   )
@@ -135,6 +150,9 @@ export function CurrencyExchangePage() {
   const rateLabel = isReverseDirection
     ? `1 ${selectedRate.targetCurrencyLabel} = ${formatRateValue(1 / selectedRate.rateValue)} ${BASE_CURRENCY_LABEL}`
     : `1 ${BASE_CURRENCY_LABEL} = ${formatRateValue(selectedRate.rateValue)} ${selectedRate.targetCurrencyLabel}`
+  const displayedRateTrend = isReverseDirection
+    ? invertRateTrendDirection(rateTrends[selectedRate.forexCode] ?? 'neutral')
+    : (rateTrends[selectedRate.forexCode] ?? 'neutral')
   const transferSeedAmount = isReverseDirection ? recipientAmount : debitAmount.trim()
   const transferPath =
     transferSeedAmount.length > 0
@@ -368,9 +386,24 @@ export function CurrencyExchangePage() {
             <p className="text-sm font-semibold text-[#3E38C7] sm:text-[15px]">
               Валютный курс
             </p>
-            <p className="text-right text-sm font-semibold text-[var(--color-text-strong)] sm:text-[15px]">
-              {rateLabel}
-            </p>
+            <div className="flex items-center gap-2">
+              {displayedRateTrend !== 'neutral' ? (
+                <span
+                  aria-label={displayedRateTrend === 'up' ? 'Курс вырос' : 'Курс снизился'}
+                  className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm ${
+                    displayedRateTrend === 'up'
+                      ? 'bg-[rgba(37,181,108,0.14)] text-[#25B56C]'
+                      : 'bg-[rgba(255,90,114,0.14)] text-[#FF5A72]'
+                  }`}
+                >
+                  {displayedRateTrend === 'up' ? '↑' : '↓'}
+                </span>
+              ) : null}
+
+              <p className="text-right text-sm font-semibold text-[var(--color-text-strong)] sm:text-[15px]">
+                {rateLabel}
+              </p>
+            </div>
           </div>
 
           <Link

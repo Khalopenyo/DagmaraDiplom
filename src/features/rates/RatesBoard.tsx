@@ -22,7 +22,7 @@ function assertRatesContract(countryOrder: readonly string[]) {
 }
 
 export function RatesBoard() {
-  const rates = useLiveCbdcRates()
+  const { rates } = useLiveCbdcRates()
 
   assertRatesContract(rates.map((rate) => rate.country))
 
