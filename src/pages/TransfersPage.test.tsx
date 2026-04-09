@@ -69,4 +69,57 @@ describe('TransfersPage', () => {
 
     expect(recipientInput).toHaveValue('2200 0000 0000 51519')
   })
+
+  it('recalculates the quote breakdown for a debit amount of 100', async () => {
+    const user = userEvent.setup()
+
+    renderApp(<AppRoutes />, { route: '/transfers' })
+
+    await user.type(
+      screen.getByLabelText('Номер карты получателя'),
+      '2200000000001746',
+    )
+    await user.type(screen.getByLabelText('Сумма списания'), '100')
+
+    expect(screen.getAllByText('1 ЦР = 2.234 ЦЮ')).toHaveLength(2)
+    expect(screen.getAllByText('223.40 ¥')).toHaveLength(2)
+    expect(screen.getByText('10 ₽')).toBeInTheDocument()
+    expect(screen.getByText('110 ₽')).toBeInTheDocument()
+    expect(screen.getByText('Комиссия платформы')).toBeInTheDocument()
+    expect(screen.getByText('Итого')).toBeInTheDocument()
+  })
+
+  it('keeps confirm disabled for invalid drafts and enables it only for a valid one', async () => {
+    const user = userEvent.setup()
+
+    renderApp(<AppRoutes />, { route: '/transfers' })
+
+    const confirmButton = screen.getByRole('button', { name: 'Подтвердить' })
+    const amountInput = screen.getByLabelText('Сумма списания')
+    const recipientInput = screen.getByLabelText('Номер карты получателя')
+
+    expect(confirmButton).toBeDisabled()
+
+    await user.type(amountInput, '3469.53')
+    expect(confirmButton).toBeDisabled()
+
+    await user.clear(amountInput)
+    await user.type(recipientInput, '2200000000001746')
+    await user.type(amountInput, '100')
+
+    expect(confirmButton).toBeEnabled()
+
+    await user.click(confirmButton)
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Переводы',
+      }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', {
+        name: 'Подтвердить',
+      }),
+    ).toBeInTheDocument()
+  })
 })
