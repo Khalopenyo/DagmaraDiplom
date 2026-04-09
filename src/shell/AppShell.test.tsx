@@ -86,4 +86,15 @@ describe('AppShell', () => {
     expect(screen.getByText('Simulated demo')).toBeInTheDocument()
     expect(screen.getByText('Здравствуйте, Дагмара')).toBeInTheDocument()
   })
+
+  it('keeps nested exchange routes in the full-width content mode', () => {
+    renderApp(<AppRoutes />, { route: '/rates/exchange/china' })
+
+    expect(screen.getByTestId('page-content').className).toContain('max-w-none')
+    expect(
+      screen.getByRole('heading', {
+        name: 'Обмен',
+      }),
+    ).toBeInTheDocument()
+  })
 })

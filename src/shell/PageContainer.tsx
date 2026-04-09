@@ -9,7 +9,10 @@ interface PageContainerProps {
 
 export function PageContainer({ children }: PageContainerProps) {
   const location = useLocation()
-  const route = TOP_LEVEL_ROUTES.find(({ path }) => path === location.pathname)
+  const route = TOP_LEVEL_ROUTES.find(
+    ({ path }) =>
+      location.pathname === path || location.pathname.startsWith(`${path}/`),
+  )
   const contentWidthClassName =
     route?.contentWidth === 'full' ? 'max-w-none' : 'max-w-[760px]'
 

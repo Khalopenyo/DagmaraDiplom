@@ -67,7 +67,7 @@ export function CurrencyExchangePage() {
       : '/transfers'
 
   return (
-    <section className="mx-auto flex w-full max-w-[380px] flex-col gap-6 pb-8">
+    <section className="flex w-full flex-col gap-8 pb-8">
       <div className="flex items-start gap-4">
         <Link
           aria-label="Назад к курсам валют"
@@ -94,80 +94,81 @@ export function CurrencyExchangePage() {
         </div>
       </div>
 
-      <div className="flex justify-center px-2">
-        <ExchangeHeroIllustration />
-      </div>
-
-      <section className="rounded-[34px] border-[3px] border-[#2F80ED] bg-white px-4 py-5 shadow-[0_24px_64px_rgba(47,128,237,0.12)] sm:px-5 sm:py-6">
-        <div className="flex flex-col gap-6 rounded-[28px] bg-white">
-          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
-            <input
-              aria-label="Сумма списания в ЦР"
-              className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none placeholder:text-[rgba(43,56,92,0.36)]"
-              inputMode="decimal"
-              onChange={(event) => setDebitAmount(sanitizeAmountInput(event.target.value))}
-              placeholder="0"
-              value={debitAmount}
-            />
-            <span
-              aria-hidden="true"
-              className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
-            />
-            <span className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)]">
-              ЦР
-              <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
-                ⌄
-              </span>
-            </span>
-          </label>
-
-          <div className="flex items-center justify-center gap-7 text-[44px] leading-none">
-            <span aria-hidden="true" className="text-[#3E38C7]">
-              ↓
-            </span>
-            <span aria-hidden="true" className="text-[#FF5A72]">
-              ↑
-            </span>
-          </div>
-
-          <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
-            <input
-              aria-label={`Сумма получения в ${selectedRate.targetCurrencyLabel}`}
-              className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none"
-              readOnly
-              tabIndex={-1}
-              value={recipientAmount}
-            />
-            <span
-              aria-hidden="true"
-              className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
-            />
-            <span className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)]">
-              {selectedRate.targetCurrencyLabel}
-              <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
-                ⌄
-              </span>
-            </span>
-          </label>
-
-          <div className="flex items-end justify-between gap-4 pt-2">
-            <p className="text-sm font-semibold text-[#3E38C7] sm:text-[15px]">
-              Валютный курс
-            </p>
-            <p className="text-right text-sm font-semibold text-[var(--color-text-strong)] sm:text-[15px]">
-              {rateLabel}
-            </p>
-          </div>
-
-          <Link
-            className="inline-flex min-h-[58px] items-center justify-center rounded-[16px] bg-[#3E38C7] px-5 py-4 text-lg font-medium text-white shadow-[0_18px_32px_rgba(62,56,199,0.24)] transition-transform duration-150 hover:-translate-y-0.5"
-            to={transferPath}
-          >
-            Перевести
-          </Link>
+      <div className="grid gap-8 xl:grid-cols-[minmax(360px,0.92fr)_minmax(420px,1fr)] xl:items-center">
+        <div className="flex min-h-[320px] items-center justify-center rounded-[36px] bg-[radial-gradient(circle_at_top,#f4f6ff_0%,#ffffff_55%,#eef3ff_100%)] px-6 py-8 shadow-[0_24px_60px_rgba(24,38,58,0.06)]">
+          <ExchangeHeroIllustration />
         </div>
-      </section>
 
+        <section className="rounded-[34px] border-[3px] border-[#2F80ED] bg-white px-4 py-5 shadow-[0_24px_64px_rgba(47,128,237,0.12)] sm:px-5 sm:py-6">
+          <div className="flex flex-col gap-6 rounded-[28px] bg-white">
+            <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
+              <input
+                aria-label="Сумма списания в ЦР"
+                className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none placeholder:text-[rgba(43,56,92,0.36)]"
+                inputMode="decimal"
+                onChange={(event) => setDebitAmount(sanitizeAmountInput(event.target.value))}
+                placeholder="0"
+                value={debitAmount}
+              />
+              <span
+                aria-hidden="true"
+                className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
+              />
+              <span className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)]">
+                ЦР
+                <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
+                  ⌄
+                </span>
+              </span>
+            </label>
+
+            <div className="flex items-center justify-center gap-7 text-[44px] leading-none">
+              <span aria-hidden="true" className="text-[#3E38C7]">
+                ↓
+              </span>
+              <span aria-hidden="true" className="text-[#FF5A72]">
+                ↑
+              </span>
+            </div>
+
+            <label className="flex items-center rounded-[18px] border border-[rgba(43,56,92,0.16)] bg-white px-4 py-4 shadow-[0_12px_24px_rgba(24,38,58,0.04)]">
+              <input
+                aria-label={`Сумма получения в ${selectedRate.targetCurrencyLabel}`}
+                className="min-w-0 flex-1 border-0 bg-transparent text-[28px] font-medium leading-none text-[var(--color-text-strong)] outline-none"
+                readOnly
+                tabIndex={-1}
+                value={recipientAmount}
+              />
+              <span
+                aria-hidden="true"
+                className="mx-4 h-11 w-px shrink-0 bg-[rgba(43,56,92,0.12)]"
+              />
+              <span className="inline-flex items-center gap-2 text-[24px] font-medium text-[var(--color-text-strong)]">
+                {selectedRate.targetCurrencyLabel}
+                <span aria-hidden="true" className="text-[18px] text-[rgba(43,56,92,0.45)]">
+                  ⌄
+                </span>
+              </span>
+            </label>
+
+            <div className="flex items-end justify-between gap-4 pt-2">
+              <p className="text-sm font-semibold text-[#3E38C7] sm:text-[15px]">
+                Валютный курс
+              </p>
+              <p className="text-right text-sm font-semibold text-[var(--color-text-strong)] sm:text-[15px]">
+                {rateLabel}
+              </p>
+            </div>
+
+            <Link
+              className="inline-flex min-h-[58px] items-center justify-center rounded-[16px] bg-[#3E38C7] px-5 py-4 text-lg font-medium text-white shadow-[0_18px_32px_rgba(62,56,199,0.24)] transition-transform duration-150 hover:-translate-y-0.5"
+              to={transferPath}
+            >
+              Перевести
+            </Link>
+          </div>
+        </section>
+      </div>
     </section>
   )
 }
