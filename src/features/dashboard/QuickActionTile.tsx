@@ -12,6 +12,9 @@ interface QuickActionTileProps {
 }
 
 export function QuickActionTile({ action }: QuickActionTileProps) {
+  const baseClassName =
+    'group flex min-h-[132px] flex-col items-center justify-center gap-4 rounded-[24px] border px-4 py-5 text-center shadow-[0_18px_32px_rgba(24,38,58,0.08)] transition-all duration-150 ease-out'
+
   const isAccountAction =
     action.mode === 'display' &&
     action.label === ACCOUNT_ACTION_LABEL &&
@@ -25,7 +28,7 @@ export function QuickActionTile({ action }: QuickActionTileProps) {
     return (
       <button
         aria-label={action.label}
-        className="group flex min-h-[132px] cursor-pointer appearance-none flex-col items-center justify-center gap-3 border-0 bg-transparent px-2 py-4 text-center transition-transform duration-150 ease-out hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#534dc9]"
+        className={`${baseClassName} cursor-pointer appearance-none gap-3 border-[rgba(24,38,58,0.04)] bg-[rgba(255,255,255,0.92)] text-[var(--color-text-strong)] hover:-translate-y-0.5 hover:shadow-[0_22px_36px_rgba(83,77,201,0.14)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#534dc9]`}
         onClick={() =>
           document
             .getElementById('dashboard-account-summary')
@@ -40,9 +43,6 @@ export function QuickActionTile({ action }: QuickActionTileProps) {
       </button>
     )
   }
-
-  const baseClassName =
-    'group flex min-h-[132px] flex-col items-center justify-center gap-4 rounded-[24px] border px-4 py-5 text-center shadow-[0_18px_32px_rgba(24,38,58,0.08)] transition-all duration-150 ease-out'
 
   if (action.mode === 'route') {
     return (
