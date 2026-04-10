@@ -162,8 +162,8 @@ export function AuthPage() {
             </h1>
             <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
               {isLogin
-                ? 'Введите свои данные для входа'
-                : 'Создайте демо-профиль для работы'}
+                ? ''
+                : ''}
             </p>
           </div>
 
@@ -356,9 +356,9 @@ export function AuthPage() {
 
           {/* Footer note */}
           <p className="mt-6 text-center text-xs leading-5 text-[var(--color-text-muted)]">
-            Справочник пользователей сохраняется локально.
+            
             <br />
-            Это демонстрационная платформа.
+            
           </p>
         </article>
       </section>
